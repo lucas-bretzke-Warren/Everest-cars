@@ -22,33 +22,139 @@
           </button>
         </li>
       </ul>
-      <section v-show="show_loading" class="loading">
+      <section v-show="showLoading" class="loading">
         <h3>Loading . . .</h3>
       </section>
     </section>
-    <!-- <ModalForm
-      v-show="form_new_car"
-      @closeModal="closeFormModal()"
+    <ModalForm
+      v-show="formNewCar"
+      @close-modal="closeFormModal"
+      @update-car="updateCar"
+      @create-new-car="createNewCar"
       :isCreateProp="isCreate"
       :carIdProp="carId"
       :carProp="car"
-      @updateCar="updateCar"
-      @createNewCar="createNewCar"
     />
     <ConfirmationModal
-      :id="carId"
-      @getCars="getCars"
-      @closeModal="closeModal"
       v-show="checkAction"
-    /> -->
+      @close-modal="closeModal"
+      @get-cars="getCars"
+      :id="carId"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import carService from "../services/carService";
+import ModalForm from "@/components/ModalForm.vue";
+import ConfirmationModal from "@/components/ConfirmarionModal.vue";
+import { Items, IReturnUpdateCar } from "@/types";
 
-@Component
-export default class ListingOnCars extends Vue {}
+@Component({
+  components: {
+    ModalForm,
+    ConfirmationModal,
+  },
+})
+export default class ListingOnCars extends Vue {
+  public url = "http://localhost:3000/cars";
+  public formNewCar = false;
+  public checkAction = false;
+  public showLoading = false;
+  public dataCars = [];
+  public carId?: number = 0;
+  public car: Items = {
+    nome: "",
+    marca: "",
+    cor: "",
+    ano: 0,
+    portas: 0,
+    cv: null,
+    alarme: "",
+    cambio: "",
+    tetoSolar: "",
+    computadorDeBordo: "",
+  };
+  public isCreate: boolean | null = null;
+
+  public openFormModal() {
+    this.formNewCar = true;
+  }
+  public closeFormModal() {
+    this.formNewCar = false;
+  }
+  public openModal(id: number) {
+    this.checkAction = true;
+    this.carId = id;
+  }
+  public closeModal() {
+    this.checkAction = false;
+  }
+
+  public setCreateNewCar() {
+    this.car = {
+      nome: "",
+      marca: "",
+      cor: "",
+      ano: null,
+      portas: null,
+      cv: null,
+      alarme: "",
+      cambio: "",
+      tetoSolar: "",
+      computadorDeBordo: "",
+    };
+    this.isCreate = true;
+    this.openFormModal();
+  }
+
+  public async getCars() {
+    try {
+      this.showLoading = true;
+      const response = await carService.get();
+      this.dataCars = response.data;
+    } catch (erro) {
+      console.log(erro);
+    } finally {
+      this.showLoading = false;
+    }
+  }
+  public async createNewCar(car: Items) {
+    try {
+      await carService.post(car);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      this.closeFormModal();
+      this.getCars();
+    }
+  }
+  public setCarToUpdate(id: number, car: Items) {
+    this.car = Object.assign({}, car);
+    this.carId = id;
+    this.isCreate = false;
+    this.openFormModal();
+  }
+  public async updateCar({ id, car }: IReturnUpdateCar) {
+    try {
+      const carData: IReturnUpdateCar = {
+        id,
+        car,
+      };
+      await carService.put(carData);
+    } catch (erro) {
+      alert("Erro, tente novamente");
+    } finally {
+      this.closeFormModal();
+      this.getCars();
+    }
+  }
+
+  private mounted() {
+    this.getCars();
+  }
+}
 </script>
 
 
