@@ -34,7 +34,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-  ],
+, "src/services/config.ts", "src/services/carService.ts"  ],
   "exclude": [
     "node_modules"
   ]
