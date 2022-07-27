@@ -1,0 +1,43 @@
+{
+    "cars": [
+        {
+            "id": "1",
+            "nome": "Palio",
+            "marca": "Fiat",
+            "cor": "vermelho",
+            "ano": "2010",
+            "portas": "2",
+            "cv": "70",
+            "cambio": "manual",
+            "alarme": "false",
+            "tetoSolar": "false",
+            "computadorDeBordo": "false"
+        },
+        {
+            "id": "2",
+            "nome": "Gol g5",
+            "marca": "volkswagen",
+            "cor": "preto",
+            "ano": "2012",
+            "portas": "4",
+            "cv": "75",
+            "cambio": "manual",
+            "alarme": "true",
+            "tetoSolar": "false",
+            "computadorDeBordo": "false"
+        },
+        {
+            "id": "3",
+            "nome": "Logan",
+            "marca": "Renault",
+            "cor": "cinza",
+            "ano": "2014",
+            "portas": "4",
+            "cv": "80",
+            "cambio": "automático",
+            "alarme": "true",
+            "tetoSolar": "false",
+            "computadorDeBordo": "false"
+        }
+    ]
+}
