@@ -1,4 +1,4 @@
-import { IReturnUpdateCar, Items } from '@/types'
+import { IReturnUpdateCar, ICar } from '@/types'
 import { http } from './config'
 
 export default {
@@ -8,7 +8,7 @@ export default {
     delete: (id: number) => {
         return http.delete(`/cars/${id}`)
     },
-    post: (car: Items) => {
+    post: (car: ICar) => {
         return http.post("/cars/", car)
     },
     put: ({ id, car }: IReturnUpdateCar) => {

@@ -49,7 +49,7 @@ import { Component, Vue } from "vue-property-decorator";
 import carService from "../services/carService";
 import ModalForm from "@/components/ModalForm.vue";
 import ConfirmationModal from "@/components/ConfirmarionModal.vue";
-import { Items, IReturnUpdateCar } from "@/types";
+import { ICar, IReturnUpdateCar } from "@/types";
 
 @Component({
   components: {
@@ -64,7 +64,7 @@ export default class ListingOnCars extends Vue {
   public showLoading = false;
   public dataCars = [];
   public carId?: number = 0;
-  public car: Items = {
+  public car: ICar = {
     nome: "",
     marca: "",
     cor: "",
@@ -120,7 +120,7 @@ export default class ListingOnCars extends Vue {
       this.showLoading = false;
     }
   }
-  public async createNewCar(car: Items) {
+  public async createNewCar(car: ICar) {
     try {
       await carService.post(car);
     } catch (err) {
@@ -130,7 +130,7 @@ export default class ListingOnCars extends Vue {
       this.getCars();
     }
   }
-  public setCarToUpdate(id: number, car: Items) {
+  public setCarToUpdate(id: number, car: ICar) {
     this.car = Object.assign({}, car);
     this.carId = id;
     this.isCreate = false;
@@ -213,12 +213,13 @@ header {
     border-bottom: 1px solid @border-color;
     margin-bottom: 40px;
     font-weight: bold;
+    grid-template-columns: 1fr 1.9fr;
   }
   ul {
     padding: 10px 10px;
 
     display: grid;
-    grid-template-columns: 5fr 5fr 1fr 1fr;
+    grid-template-columns: 2fr 2fr .1fr .1fr;
     align-items: center;
 
     list-style: none;
