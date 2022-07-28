@@ -1,4 +1,4 @@
-export interface Items {
+export interface ICar {
     nome: string;
     marca: string;
     cor: string;
@@ -13,5 +13,5 @@ export interface Items {
 
 export interface IReturnUpdateCar{
     id: number;
-    car: Items;
+    car: ICar;
 }

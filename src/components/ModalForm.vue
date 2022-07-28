@@ -78,11 +78,11 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Watch } from "vue-property-decorator";
-import { Items, IReturnUpdateCar } from "@/types";
+import { ICar, IReturnUpdateCar } from "@/types";
 
 @Component
 export default class Modalform extends Vue {
-  public car: Items = {
+  public car: ICar = {
     nome: "",
     marca: "",
     cor: "",
@@ -101,7 +101,7 @@ export default class Modalform extends Vue {
 
   @Prop() public isCreateProp!: boolean;
   @Prop() public carIdProp!: number;
-  @Prop() public carProp!: Items;
+  @Prop() public carProp!: ICar;
 
   @Watch("carProp")
   onPropertyChanged() {
