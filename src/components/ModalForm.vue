@@ -185,7 +185,7 @@ export default class Modalform extends Vue {
     padding-bottom: 10px;
 
     display: flex;
-    align-ICar: center;
+    align-items: center;
     justify-content: center;
 
     border-bottom: 1px solid #444;
@@ -233,7 +233,7 @@ export default class Modalform extends Vue {
     padding-top: 10px;
 
     display: flex;
-    align-ICar: center;
+    align-items: center;
     justify-content: center;
 
     border-top: 1px solid #444;
