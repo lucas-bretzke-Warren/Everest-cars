@@ -21,11 +21,11 @@ export default class ConfirmationModal extends Vue {
 
   @Emit("close-modal")
   public closeModal() {
-    return this.closeModal;
+    return;
   }
   @Emit("get-cars")
   public getCars() {
-    return this.getCars;
+    return;
   }
 
   public async deleteCar(id: number) {
