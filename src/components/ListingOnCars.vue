@@ -58,7 +58,6 @@ import { ICar, IReturnUpdateCar } from "@/types";
   },
 })
 export default class ListingOnCars extends Vue {
-  public url = "http://localhost:3000/cars";
   public formNewCar = false;
   public checkAction = false;
   public showLoading = false;
