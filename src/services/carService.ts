@@ -3,15 +3,15 @@ import { http } from './config'
 
 export default {
     get: () => {
-        return http.get(`/cars`)
+        return http.get<ICar[]>(`/cars`)
     },
     delete: (id: number) => {
         return http.delete(`/cars/${id}`)
     },
     post: (car: ICar) => {
-        return http.post("/cars/", car)
+        return http.post<ICar>("/cars/", car)
     },
     put: ({ id, car }: IReturnUpdateCar) => {
-        return http.put(`/cars/${id}`, car)
+        return http.put<ICar>(`/cars/${id}`, car)
     }
 }
