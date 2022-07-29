@@ -141,7 +141,7 @@ export default class Modalform extends Vue {
         this.emitUpdateCar();
       }
     } else {
-      alert("Algum campo não etá preenchido");
+      alert("Algum campo não está preenchido");
     }
   }
 }
