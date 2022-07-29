@@ -99,9 +99,20 @@ export default class Modalform extends Vue {
     return this.isCreateProp ? "Cadastrar novo carro" : "Atualizar carro";
   }
 
-  @Prop() public isCreateProp!: boolean;
-  @Prop() public carIdProp!: number;
-  @Prop() public carProp!: ICar;
+  @Prop({
+    type: Boolean,
+    required: true,
+  })
+  readonly isCreateProp!: boolean;
+
+  @Prop({ type: Number, required: false, default: "Recebe o Id de um carro " })
+  readonly carIdProp!: number;
+
+  @Prop({
+    type: Object,
+    required: true,
+  })
+  readonly carProp!: ICar;
 
   @Watch("carProp")
   onPropertyChanged() {

@@ -17,7 +17,8 @@ import carService from "@/services/carService";
 
 @Component
 export default class ConfirmationModal extends Vue {
-  @Prop() public id?: number;
+  @Prop({ type: Number, required: true })
+  public id?: number;
 
   @Emit("close-modal")
   public closeModal() {
