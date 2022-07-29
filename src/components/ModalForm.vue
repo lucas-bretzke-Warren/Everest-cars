@@ -125,7 +125,7 @@ export default class Modalform extends Vue {
   }
 
   @Emit("create-new-car")
-  public emitCreateNewCar() {
+  public emitCreateNewCar(): ICar {
     return this.car;
   }
   @Emit("update-car")
