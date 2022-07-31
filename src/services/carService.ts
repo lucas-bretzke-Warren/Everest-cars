@@ -3,7 +3,7 @@ import { http } from './config'
 
 export default {
     get: () => {
-        return http.get<ICar[]>(`/cars`)
+        return http.get(`/cars`)
     },
     delete: (id: number) => {
         return http.delete(`/cars/${id}`)
