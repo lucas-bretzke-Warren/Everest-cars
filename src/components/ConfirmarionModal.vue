@@ -32,7 +32,7 @@ export default class ConfirmationModal extends Vue {
     return;
   }
   @Emit("get-cars")
-  public getCars() {
+  private getCars() {
     return;
   }
 

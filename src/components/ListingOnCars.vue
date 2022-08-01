@@ -78,7 +78,7 @@ export default class ListingOnCars extends Vue {
   };
   public isCreate: boolean | null = null;
 
-  public openFormModal() {
+  private openFormModal() {
     this.formNewCar = true;
   }
   public closeFormModal() {
