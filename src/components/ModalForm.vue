@@ -105,7 +105,7 @@ export default class Modalform extends Vue {
   })
   readonly isCreateProp!: boolean;
 
-  @Prop({ type: Number, required: false, default: "Recebe o Id de um carro " })
+  @Prop({ type: Number, required: false, default: 1})
   readonly carIdProp!: number;
 
   @Prop({

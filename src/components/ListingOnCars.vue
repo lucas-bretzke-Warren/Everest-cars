@@ -59,11 +59,11 @@ import { ICar, IReturnUpdateCar } from "@/types";
   },
 })
 export default class ListingOnCars extends Vue {
-  public formNewCar = false;
-  public checkAction = false;
-  public showLoading = false;
+  private formNewCar = false;
+  private checkAction = false;
+  private showLoading = false;
   public dataCars = [];
-  public carId?: number = 0;
+  private carId?: number = 0;
   public car: ICar = {
     nome: "",
     marca: "",
@@ -76,19 +76,19 @@ export default class ListingOnCars extends Vue {
     tetoSolar: "",
     computadorDeBordo: "",
   };
-  public isCreate: boolean | null = null;
+  private isCreate: boolean | null = null;
 
   private openFormModal() {
     this.formNewCar = true;
   }
-  public closeFormModal() {
+  private closeFormModal() {
     this.formNewCar = false;
   }
   public openModal(id: number) {
     this.checkAction = true;
     this.carId = id;
   }
-  public closeModal() {
+  private closeModal() {
     this.checkAction = false;
   }
 
@@ -109,7 +109,7 @@ export default class ListingOnCars extends Vue {
     this.openFormModal();
   }
 
-  public async getCars() {
+  private async getCars() {
     try {
       this.showLoading = true;
       const response = await carService.get();
@@ -120,7 +120,7 @@ export default class ListingOnCars extends Vue {
       this.showLoading = false;
     }
   }
-  public async createNewCar(car: ICar) {
+  private async createNewCar(car: ICar) {
     try {
       this.showLoading = true;
       await carService.post(car);
@@ -138,7 +138,7 @@ export default class ListingOnCars extends Vue {
     this.isCreate = false;
     this.openFormModal();
   }
-  public async updateCar({ id, car }: IReturnUpdateCar) {
+  private async updateCar({ id, car }: IReturnUpdateCar) {
     try {
       this.showLoading = true;
       const carData: IReturnUpdateCar = {
