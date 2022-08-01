@@ -20,6 +20,13 @@ export default class ConfirmationModal extends Vue {
   @Prop({ type: Number, required: true })
   public id?: number;
 
+  @Prop({
+    type: Boolean,
+    required: false,
+    default: "carrega o Loading caso um item deletado",
+  })
+  public loadingProp!: boolean;
+
   @Emit("close-modal")
   public closeModal() {
     return;
@@ -32,11 +39,13 @@ export default class ConfirmationModal extends Vue {
   public async deleteCar(id: number) {
     try {
       await carService.delete(id);
-      this.getCars();
+      this.loadingProp = true;
     } catch (erro) {
       console.log(erro);
       alert("Não foi pissível deletar este item");
     } finally {
+      this.loadingProp = false;
+      this.getCars();
       this.closeModal();
     }
   }

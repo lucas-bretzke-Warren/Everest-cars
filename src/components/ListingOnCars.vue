@@ -40,12 +40,13 @@
       @close-modal="closeModal"
       @get-cars="getCars"
       :id="carId"
+      :loadingProp="showLoading"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";''
+import { Component, Vue } from "vue-property-decorator";
 import carService from "../services/carService";
 import ModalForm from "@/components/ModalForm.vue";
 import ConfirmationModal from "@/components/ConfirmarionModal.vue";
@@ -121,12 +122,14 @@ export default class ListingOnCars extends Vue {
   }
   public async createNewCar(car: ICar) {
     try {
+      this.showLoading = true;
       await carService.post(car);
     } catch (err) {
       console.log(err);
     } finally {
       this.closeFormModal();
       this.getCars();
+      this.showLoading = false;
     }
   }
   public setCarToUpdate(id: number, car: ICar) {
@@ -137,6 +140,7 @@ export default class ListingOnCars extends Vue {
   }
   public async updateCar({ id, car }: IReturnUpdateCar) {
     try {
+      this.showLoading = true;
       const carData: IReturnUpdateCar = {
         id,
         car,
@@ -147,6 +151,7 @@ export default class ListingOnCars extends Vue {
     } finally {
       this.closeFormModal();
       this.getCars();
+      this.showLoading = false;
     }
   }
 
@@ -218,7 +223,7 @@ header {
     padding: 10px 10px;
 
     display: grid;
-    grid-template-columns: 2fr 2fr .1fr .1fr;
+    grid-template-columns: 2fr 2fr 0.1fr 0.1fr;
     align-items: center;
 
     list-style: none;
