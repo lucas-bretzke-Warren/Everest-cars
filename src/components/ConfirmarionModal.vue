@@ -18,21 +18,20 @@ import carService from "@/services/carService";
 @Component
 export default class ConfirmationModal extends Vue {
   @Prop({ type: Number, required: true })
-  public id?: number;
+  readonly id?: number;
 
   @Prop({
     type: Boolean,
-    required: false,
-    default: "carrega o Loading caso um item deletado",
+    required: true,
   })
-  public loadingProp!: boolean;
+  private loadingProp!: boolean;
 
   @Emit("close-modal")
   public closeModal() {
     return;
   }
   @Emit("get-cars")
-  public getCars() {
+  private getCars() {
     return;
   }
 
