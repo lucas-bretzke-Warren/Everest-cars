@@ -76,7 +76,7 @@ export default class ListingOnCars extends Vue {
     tetoSolar: "",
     computadorDeBordo: "",
   };
-  private isCreate: boolean | null = null;
+  private isCreate = false ;
 
   private openFormModal() {
     this.formNewCar = true;

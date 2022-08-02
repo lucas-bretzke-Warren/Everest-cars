@@ -105,7 +105,7 @@ export default class Modalform extends Vue {
   })
   readonly isCreateProp!: boolean;
 
-  @Prop({ type: Number, required: false, default: 1})
+  @Prop({ type: Number, required: false, default: 1 })
   readonly carIdProp!: number;
 
   @Prop({
@@ -146,7 +146,7 @@ export default class Modalform extends Vue {
       this.car.tetoSolar &&
       this.car.computadorDeBordo
     ) {
-      if (this.isCreateProp) {
+      if (this.isCreateProp == true) {
         this.emitCreateNewCar();
       } else {
         this.emitUpdateCar();
