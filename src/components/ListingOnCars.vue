@@ -22,33 +22,143 @@
           </button>
         </li>
       </ul>
-      <section v-show="show_loading" class="loading">
+      <section v-show="showLoading" class="loading">
         <h3>Loading . . .</h3>
       </section>
     </section>
-    <!-- <ModalForm
-      v-show="form_new_car"
-      @closeModal="closeFormModal()"
+    <ModalForm
+      v-show="formNewCar"
+      @close-modal="closeFormModal"
+      @update-car="updateCar"
+      @create-new-car="createNewCar"
       :isCreateProp="isCreate"
       :carIdProp="carId"
       :carProp="car"
-      @updateCar="updateCar"
-      @createNewCar="createNewCar"
     />
     <ConfirmationModal
-      :id="carId"
-      @getCars="getCars"
-      @closeModal="closeModal"
       v-show="checkAction"
-    /> -->
+      @close-modal="closeModal"
+      @get-cars="getCars"
+      :id="carId"
+      :loadingProp="showLoading"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import carService from "../services/carService";
+import ModalForm from "@/components/ModalForm.vue";
+import ConfirmationModal from "@/components/ConfirmarionModal.vue";
+import { ICar, IReturnUpdateCar } from "@/types";
 
-@Component
-export default class ListingOnCars extends Vue {}
+@Component({
+  components: {
+    ModalForm,
+    ConfirmationModal,
+  },
+})
+export default class ListingOnCars extends Vue {
+  private formNewCar = false;
+  private checkAction = false;
+  private showLoading = false;
+  public dataCars = [];
+  private carId?: number = 0;
+  public car: ICar = {
+    nome: "",
+    marca: "",
+    cor: "",
+    ano: 0,
+    portas: 0,
+    cv: null,
+    alarme: "",
+    cambio: "",
+    tetoSolar: "",
+    computadorDeBordo: "",
+  };
+  private isCreate: boolean | null = null;
+
+  private openFormModal() {
+    this.formNewCar = true;
+  }
+  private closeFormModal() {
+    this.formNewCar = false;
+  }
+  public openModal(id: number) {
+    this.checkAction = true;
+    this.carId = id;
+  }
+  private closeModal() {
+    this.checkAction = false;
+  }
+
+  public setCreateNewCar() {
+    this.car = {
+      nome: "",
+      marca: "",
+      cor: "",
+      ano: null,
+      portas: null,
+      cv: null,
+      alarme: "",
+      cambio: "",
+      tetoSolar: "",
+      computadorDeBordo: "",
+    };
+    this.isCreate = true;
+    this.openFormModal();
+  }
+
+  private async getCars() {
+    try {
+      this.showLoading = true;
+      const response = await carService.get();
+      this.dataCars = response.data;
+    } catch (erro) {
+      console.log(erro);
+    } finally {
+      this.showLoading = false;
+    }
+  }
+  private async createNewCar(car: ICar) {
+    try {
+      this.showLoading = true;
+      await carService.post(car);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      this.closeFormModal();
+      this.getCars();
+      this.showLoading = false;
+    }
+  }
+  public setCarToUpdate(id: number, car: ICar) {
+    this.car = Object.assign({}, car);
+    this.carId = id;
+    this.isCreate = false;
+    this.openFormModal();
+  }
+  private async updateCar({ id, car }: IReturnUpdateCar) {
+    try {
+      this.showLoading = true;
+      const carData: IReturnUpdateCar = {
+        id,
+        car,
+      };
+      await carService.put(carData);
+    } catch (erro) {
+      alert("Erro, tente novamente");
+    } finally {
+      this.closeFormModal();
+      this.getCars();
+      this.showLoading = false;
+    }
+  }
+
+  private mounted() {
+    this.getCars();
+  }
+}
 </script>
 
 
@@ -107,12 +217,13 @@ header {
     border-bottom: 1px solid @border-color;
     margin-bottom: 40px;
     font-weight: bold;
+    grid-template-columns: 1fr 1.9fr;
   }
   ul {
     padding: 10px 10px;
 
     display: grid;
-    grid-template-columns: 5fr 5fr 1fr 1fr;
+    grid-template-columns: 2fr 2fr 0.1fr 0.1fr;
     align-items: center;
 
     list-style: none;
