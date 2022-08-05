@@ -5,8 +5,9 @@
       <h4>que deseja deletar este item?</h4>
     </div>
     <div class="content-btns">
+      <!-- data-test="close-modal" -->
       <button @click="closeModal">Cancelar</button
-      ><button @click="deleteCar(id)">Sim</button>
+      ><button data-testid="emit-close-modal-button" @click="deleteCar(id)">Sim</button>
     </div>
   </section>
 </template>
@@ -18,7 +19,7 @@ import carService from "@/services/carService";
 @Component
 export default class ConfirmationModal extends Vue {
   @Prop({ type: Number, required: true })
-  readonly id?: number;
+  readonly id!: number;
 
   @Prop({
     type: Boolean,
