@@ -1,23 +1,35 @@
 <template>
   <div>
     <nav>Lista de carros</nav>
-    <header><button @click="setCreateNewCar">Adicionar carro</button></header>
+    <header>
+      <button data-testid="set-create-new-car" @click="setCreateNewCar">
+        Adicionar carro
+      </button>
+    </header>
 
     <section class="container-list">
       <ul class="titles">
         <li>Carro</li>
         <li>Ano</li>
       </ul>
-      <ul v-for="car in dataCars" :key="car.id">
+      <ul aria-label="cars-label" v-for="car in dataCars" :key="car.id">
         <li>{{ car.nome }}</li>
         <li>{{ car.ano }}</li>
         <li>
-          <button class="btn-put" @click="setCarToUpdate(car.id, car)">
+            <!-- data-testid="set-car-to-update" -->
+          <button
+            class="btn-put"
+            @click="setCarToUpdate(car.id, car)"
+          >
             Editar carro
           </button>
         </li>
         <li>
-          <button class="btn-delete" @click="openModal(car.id)">
+          <button
+            data-testid="test-open-modal"
+            class="btn-delete"
+            @click="openModal(car.id)"
+          >
             Deletar carro
           </button>
         </li>
@@ -27,7 +39,8 @@
       </section>
     </section>
     <ModalForm
-      v-show="formNewCar"
+      data-testid="modal-form"
+      v-show="showModalForm"
       @close-modal="closeFormModal"
       @update-car="updateCar"
       @create-new-car="createNewCar"
@@ -36,20 +49,21 @@
       :carProp="car"
     />
     <ConfirmationModal
+      data-testid="confirmation-modal"
       v-show="checkAction"
       @close-modal="closeModal"
       @get-cars="getCars"
       :id="carId"
-      :loadingProp="showLoading"
+      @on-change-loading="onChangeLoading"
     />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import carService from "../services/carService";
+import carService from "@/services/carService";
 import ModalForm from "@/components/ModalForm.vue";
-import ConfirmationModal from "@/components/ConfirmarionModal.vue";
+import ConfirmationModal from "@/components/ConfirmationModal.vue";
 import { ICar, IReturnUpdateCar } from "@/types";
 
 @Component({
@@ -59,10 +73,10 @@ import { ICar, IReturnUpdateCar } from "@/types";
   },
 })
 export default class ListingOnCars extends Vue {
-  private formNewCar = false;
+  public showModalForm = false;
   private checkAction = false;
   private showLoading = false;
-  public dataCars = [];
+  public dataCars: ICar[] = [];
   private carId?: number = 0;
   public car: ICar = {
     nome: "",
@@ -75,21 +89,29 @@ export default class ListingOnCars extends Vue {
     cambio: "",
     tetoSolar: "",
     computadorDeBordo: "",
+    id: ''
   };
-  private isCreate = false ;
+  private isCreate = false;
 
   private openFormModal() {
-    this.formNewCar = true;
+    this.showModalForm = true;
   }
+
   private closeFormModal() {
-    this.formNewCar = false;
+    this.showModalForm = false;
   }
+
   public openModal(id: number) {
     this.checkAction = true;
     this.carId = id;
   }
+
   private closeModal() {
     this.checkAction = false;
+  }
+
+  public onChangeLoading(value: boolean) {
+    this.showLoading = value;
   }
 
   public setCreateNewCar() {
@@ -104,6 +126,7 @@ export default class ListingOnCars extends Vue {
       cambio: "",
       tetoSolar: "",
       computadorDeBordo: "",
+      id: ''
     };
     this.isCreate = true;
     this.openFormModal();
@@ -111,36 +134,40 @@ export default class ListingOnCars extends Vue {
 
   private async getCars() {
     try {
-      this.showLoading = true;
+      this.onChangeLoading(true);
+
       const response = await carService.get();
-      this.dataCars = response.data;
+      this.dataCars = response;
     } catch (erro) {
       console.log(erro);
     } finally {
-      this.showLoading = false;
+      this.onChangeLoading(false);
     }
   }
+
   private async createNewCar(car: ICar) {
     try {
-      this.showLoading = true;
+      this.onChangeLoading(true);
       await carService.post(car);
     } catch (err) {
       console.log(err);
     } finally {
       this.closeFormModal();
       this.getCars();
-      this.showLoading = false;
+      this.onChangeLoading(false);
     }
   }
+
   public setCarToUpdate(id: number, car: ICar) {
     this.car = Object.assign({}, car);
     this.carId = id;
     this.isCreate = false;
     this.openFormModal();
   }
+
   private async updateCar({ id, car }: IReturnUpdateCar) {
     try {
-      this.showLoading = true;
+      this.onChangeLoading(true);
       const carData: IReturnUpdateCar = {
         id,
         car,
@@ -151,12 +178,12 @@ export default class ListingOnCars extends Vue {
     } finally {
       this.closeFormModal();
       this.getCars();
-      this.showLoading = false;
+      this.onChangeLoading(false);
     }
   }
 
-  private mounted() {
-    this.getCars();
+  async mounted() {
+    await this.getCars();
   }
 }
 </script>

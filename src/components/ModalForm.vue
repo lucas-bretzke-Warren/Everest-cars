@@ -93,6 +93,7 @@ export default class Modalform extends Vue {
     cambio: "",
     tetoSolar: "",
     computadorDeBordo: "",
+    id: ''
   };
 
   get getModalTitle() {

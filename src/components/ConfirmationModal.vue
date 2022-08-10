@@ -5,9 +5,10 @@
       <h4>que deseja deletar este item?</h4>
     </div>
     <div class="content-btns">
-      <!-- data-test="close-modal" -->
       <button @click="closeModal">Cancelar</button
-      ><button data-testid="emit-close-modal-button" @click="deleteCar(id)">Sim</button>
+      ><button data-testid="emit-close-modal-button" @click="deleteCar">
+        Sim
+      </button>
     </div>
   </section>
 </template>
@@ -21,30 +22,30 @@ export default class ConfirmationModal extends Vue {
   @Prop({ type: Number, required: true })
   readonly id!: number;
 
-  @Prop({
-    type: Boolean,
-    required: true,
-  })
-  private loadingProp!: boolean;
-
   @Emit("close-modal")
   public closeModal() {
     return;
   }
+
   @Emit("get-cars")
   private getCars() {
     return;
   }
 
-  public async deleteCar(id: number) {
+  @Emit('on-change-loading')
+  private emitOnChangeLoading(value: boolean) {
+    return value
+  }
+
+  public async deleteCar() {
     try {
-      await carService.delete(id);
-      this.loadingProp = true;
+      this.emitOnChangeLoading(true)
+      await carService.delete(this.id);
     } catch (erro) {
       console.log(erro);
-      alert("Não foi pissível deletar este item");
+      alert("Não foi possível deletar este item");
     } finally {
-      this.loadingProp = false;
+      this.emitOnChangeLoading(false)
       this.getCars();
       this.closeModal();
     }
