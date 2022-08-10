@@ -16,11 +16,8 @@
         <li>{{ car.nome }}</li>
         <li>{{ car.ano }}</li>
         <li>
-            <!-- data-testid="set-car-to-update" -->
-          <button
-            class="btn-put"
-            @click="setCarToUpdate(car.id, car)"
-          >
+          <!-- data-testid="set-car-to-update" -->
+          <button class="btn-put" @click="setCarToUpdate(car.id, car)">
             Editar carro
           </button>
         </li>
@@ -89,7 +86,7 @@ export default class ListingOnCars extends Vue {
     cambio: "",
     tetoSolar: "",
     computadorDeBordo: "",
-    id: ''
+    id: "",
   };
   private isCreate = false;
 
@@ -126,7 +123,7 @@ export default class ListingOnCars extends Vue {
       cambio: "",
       tetoSolar: "",
       computadorDeBordo: "",
-      id: ''
+      id: "",
     };
     this.isCreate = true;
     this.openFormModal();

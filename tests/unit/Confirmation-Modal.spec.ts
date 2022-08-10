@@ -1,33 +1,55 @@
-import { render, fireEvent, getAllByRole } from '@testing-library/vue'
-import { mount } from '@vue/test-utils'
+import { render, fireEvent, screen, waitFor } from '@testing-library/vue'
 import '@testing-library/jest-dom'
 import ConfirmationModal from '@/components/ConfirmationModal.vue'
-import { deleteCar } from '@/services/car/mock'
+import carService from "@/services/carService";
+
+jest.mock('@/services/carService', () => ({
+  delete: jest.fn().mockResolvedValue({})
+}))
+
+interface Props {
+  id: number
+}
+
+const renderConfirmationModal = (props?: Props) =>
+  render(ConfirmationModal, {
+    props
+  })
 
 describe('ConfirmationModal.vue', () => {
-  it("Shoult render component", async () => {
-    const { getByText } = render(ConfirmationModal);
-    expect(getByText("Tem certeza")).toBeVisible()
+  beforeEach(() => {
+    jest.clearAllMocks()
   })
 
-  it('Should render component props', () => {
-    const wrapper = mount(ConfirmationModal, {
-      propsData: { loadingProp: true, id: 1 }
-    })
-    expect(wrapper.vm).toBeDefined()
+  it('should render with default values', () => {
+    renderConfirmationModal()
+
+    screen.getByText('Tem certeza')
+    screen.getByText('que deseja deletar este item?')
+    screen.getByText('Cancelar')
+    screen.getByText('Sim')
   })
 
-  it("Should be able to emit close-modal event", () => {
-    const { emitted, getByRole } = render(ConfirmationModal)
-    const closeModal = getByRole('button', { name: 'Cancelar' })
-    fireEvent.click(closeModal)
+  it("Should emit close-modal when clicked 'Cancelar' button", async () => {
+    const { emitted } = renderConfirmationModal()
+
+    await fireEvent.click(screen.getByText('Cancelar'))
     expect(emitted()['close-modal']).toBeTruthy()
   })
 
-  // NESTE ARQUIVO DE TESTS FALTA APENAS TESTAR O METHOD "deleteCar"
   it("Should be able to method deleteCar event", async () => {
-    const { getByTestId } = render(ConfirmationModal)
-    const emitteConfirmButtond = getByTestId('emit-close-modal-button')
-    fireEvent.click(emitteConfirmButtond)
+    const { emitted } = renderConfirmationModal({ id: 1 })
+
+    await fireEvent.click(screen.getByText('Sim'))
+
+    expect(emitted()['on-change-loading'][0][0]).toBeTruthy()
+    expect(carService.delete).toBeCalledWith(1)
+
+    await waitFor(() => {
+      expect(emitted()['get-cars']).toBeTruthy()
+      expect(emitted()['close-modal']).toBeTruthy()
+
+      expect(emitted()['on-change-loading'][1][0]).toBeFalsy()
+    })
   })
-})  
+})
