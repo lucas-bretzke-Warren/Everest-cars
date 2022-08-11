@@ -6,9 +6,7 @@
     </div>
     <div class="content-btns">
       <button @click="closeModal">Cancelar</button
-      ><button data-testid="emit-close-modal-button" @click="deleteCar">
-        Sim
-      </button>
+      ><button @click="deleteCar(id)">Sim</button>
     </div>
   </section>
 </template>
