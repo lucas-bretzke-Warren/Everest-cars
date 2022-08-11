@@ -5,6 +5,7 @@ export interface ICar {
     ano: number | null;
     portas: number | null;
     cv: number | null;
+    id: string
     cambio: string;
     alarme: string;
     tetoSolar: string
