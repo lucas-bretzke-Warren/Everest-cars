@@ -1,33 +1,34 @@
 import { ICar } from '@/types'
 
+
 export const carMock: ICar = {
-  alarme: 'tem',
-  ano: 2017,
-  cambio: 'automático',
-  computadorDeBordo: 'tem',
-  cor: 'preta',
-  cv: 460,
-  id: 'a-IfVws',
-  marca: 'BMW',
-  nome: 'Bmw-135',
-  portas: 4,
-  tetoSolar: 'tem',
+  nome: 'Fusca',
+  marca: 'volks',
+  cor: 'branco',
+  ano: 1999,
+  portas: 2,
+  cv: 70,
+  alarme: 'não tem',
+  cambio: 'manual',
+  tetoSolar: 'não tem',
+  computadorDeBordo: 'não tem',
+  id: 'ayTdGKx'
 }
 
 export const carArrayMock: ICar[] = [
   { ...carMock },
   {
-    nome: 'Fusca',
-    marca: 'volks',
-    cor: 'branco',
-    ano: 1999,
-    portas: 2,
-    cv: 70,
-    alarme: 'não tem',
-    cambio: 'manual',
-    tetoSolar: 'não tem',
-    computadorDeBordo: 'não tem',
-    id: 'ayTdGKx'
+    nome: "Bmw-135",
+    marca: "BMW",
+    cor: "preta",
+    ano: 2017,
+    portas: 4,
+    cv: 460,
+    alarme: "tem",
+    cambio: "automático",
+    tetoSolar: "tem",
+    computadorDeBordo: "tem",
+    id: "a-IfVws"
   },
   {
     nome: "Palio",
@@ -54,5 +55,5 @@ export const carArrayMock: ICar[] = [
     tetoSolar: "tem",
     computadorDeBordo: "tem",
     id: "Xy8htry"
-  }
+  },
 ]
