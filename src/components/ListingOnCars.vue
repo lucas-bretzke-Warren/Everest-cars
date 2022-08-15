@@ -2,9 +2,7 @@
   <div>
     <nav>Lista de carros</nav>
     <header>
-      <button data-testid="set-create-new-car" @click="setCreateNewCar">
-        Adicionar carro
-      </button>
+      <button @click="setCreateNewCar">Adicionar carro</button>
     </header>
 
     <section class="container-list">
@@ -16,7 +14,6 @@
         <li>{{ car.nome }}</li>
         <li>{{ car.ano }}</li>
         <li>
-          <!-- data-testid="set-car-to-update" -->
           <button class="btn-put" @click="setCarToUpdate(car.id, car)">
             Editar carro
           </button>
