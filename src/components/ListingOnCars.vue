@@ -20,7 +20,6 @@
         </li>
         <li>
           <button
-            data-testid="test-open-modal"
             class="btn-delete"
             @click="openModal(car.id)"
           >
