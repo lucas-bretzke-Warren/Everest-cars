@@ -7,11 +7,12 @@
     <form class="form_new_car">
       <div class="content">
         <label for="">Nome do carro</label>
-        <input type="text" placeholder="nome?" v-model="car.nome" />
+        <input aria-label="inputName" type="text" placeholder="nome?" v-model="car.nome"/>
       </div>
       <div class="content">
         <label for="">Marca</label>
         <input
+          aria-label="inputMarca"
           type="text"
           v-model="car.marca"
           placeholder="Reno,Fiat,Volvo..."
@@ -20,18 +21,25 @@
       <div class="content">
         <label for="">Cor</label>
         <input
+          aria-label="inputCor"
           type="text"
           v-model="car.cor"
           placeholder="branco,cinza,rosa..."
         />
       </div>
       <div class="content">
-        <label for="">Ano</label>
-        <input type="text" v-model="car.ano" placeholder="##/##/####" />
+        <label for="">Ano de fabricação</label>
+        <input
+          aria-label="inputAno"
+          type="text"
+          v-model="car.ano"
+          placeholder="##/##/####"
+        />
       </div>
       <div class="content">
         <label for=""> Quantidade de portas</label>
         <input
+          aria-label="inputPortas"
           type="text"
           v-model="car.portas"
           placeholder="digite um numero"
@@ -39,11 +47,17 @@
       </div>
       <div class="content">
         <label for="">CV</label>
-        <input type="text" v-model="car.cv" placeholder="quantos CV ?" />
+        <input
+          aria-label="inputCV"
+          type="text"
+          v-model="car.cv"
+          placeholder="quantos CV ?"
+        />
       </div>
       <div class="content">
         <label for="">Câmbio</label>
         <input
+          aria-label="inputCâmbio"
           type="text"
           v-model="car.cambio"
           placeholder="automático / manual"
@@ -51,11 +65,17 @@
       </div>
       <div class="content">
         <label for="">Alarme</label>
-        <input type="text" v-model="car.alarme" placeholder="tem / não tem ?" />
+        <input
+          aria-label="inputAlarme"
+          type="text"
+          v-model="car.alarme"
+          placeholder="tem / não tem ?"
+        />
       </div>
       <div class="content">
         <label for="">Teto solar</label>
         <input
+          aria-label="inputTetoSolar"
           type="text"
           v-model="car.tetoSolar"
           placeholder="tem / não tem ?"
@@ -64,6 +84,7 @@
       <div class="content">
         <label for="">Computador de bordo</label>
         <input
+          aria-label="inputComputadorDeBordo"
           type="text"
           v-model="car.computadorDeBordo"
           placeholder="tem / não tem ?"
@@ -93,7 +114,7 @@ export default class Modalform extends Vue {
     cambio: "",
     tetoSolar: "",
     computadorDeBordo: "",
-    id: ''
+    id: "",
   };
 
   get getModalTitle() {
