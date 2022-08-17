@@ -18,8 +18,6 @@ const renderListingOnCars = (props?: Props) =>
   render(ListingOnCars, {
     props,
   })
-const renderModalForm = () => render(ModalForm, {})
-
 
 describe('ListingOnCars.vue', () => {
   beforeEach(() => {
@@ -61,100 +59,17 @@ describe('ListingOnCars.vue', () => {
     expect(screen.getByText('Loading . . .')).not.toBeVisible()
   })
 
-  it('It should emit the setCreateNewCar event and render the values that this event sets to the ModalForm component', async () => {
-    const { getByTestId } = renderListingOnCars()
-
-    await fireEvent.click(screen.getByText('Adicionar carro'))
-    expect(getByTestId('modal-form')).toBeVisible()
-
-    await waitFor(() => {
-      screen.getByText('Nome do carro')
-      screen.getByText('Marca')
-      screen.getByText('Cor')
-      screen.getByText('Ano de fabricação')
-      screen.getByText('Quantidade de portas')
-      screen.getByText('Quantidade de portas')
-      screen.getByText('CV')
-      screen.getByText('Câmbio')
-      screen.getByText('Alarme')
-      screen.getByText('Teto solar')
-      screen.getByText('Computador de bordo')
-      screen.getByText('CONCLUIR')
-      const inputName = (<HTMLInputElement>screen.getByLabelText('inputName')).value;
-      const inputMarca = (<HTMLInputElement>screen.getByLabelText('inputMarca')).value;
-      const inputCor = (<HTMLInputElement>screen.getByLabelText('inputCor')).value;
-      const inputAno = (<HTMLInputElement>screen.getByLabelText('inputAno')).value;
-      const inputPortas = (<HTMLInputElement>screen.getByLabelText('inputPortas')).value;
-      const inputCV = (<HTMLInputElement>screen.getByLabelText('inputCV')).value;
-      const inputCâmbio = (<HTMLInputElement>screen.getByLabelText('inputCâmbio')).value;
-      const inputAlarme = (<HTMLInputElement>screen.getByLabelText('inputAlarme')).value;
-      const inputTetoSolar = (<HTMLInputElement>screen.getByLabelText('inputTetoSolar')).value;
-      const inputComputadorDeBordo = (<HTMLInputElement>screen.getByLabelText('inputComputadorDeBordo')).value;
-      expect(inputName).toBe("")
-      expect(inputMarca).toBe("")
-      expect(inputCor).toBe("")
-      expect(inputAno).toBe("")
-      expect(inputPortas).toBe("")
-      expect(inputCV).toBe("")
-      expect(inputCâmbio).toBe("")
-      expect(inputAlarme).toBe("")
-      expect(inputTetoSolar).toBe("")
-      expect(inputComputadorDeBordo).toBe("")
-    })
-  })
-
-  it('It should emit the setCarToUpdate event and render the values that this event sets to the ModalForm component', async () => {
-    const { getByTestId } = renderListingOnCars()
-
-    await waitFor(() => {
-      const carsList = screen.getAllByRole('list', {
-        name: 'cars-label'
-      })
-      const firstCarRow = within(carsList[0]).getAllByRole('listitem')
-
-      const editCar = within(firstCarRow[2]).getByText('Editar carro')
-      fireEvent.click(editCar)
-    })
-
-    await waitFor(() => {
-      expect(getByTestId('modal-form')).toBeVisible()
-
-      const inputName = (<HTMLInputElement>screen.getByLabelText('inputName')).value;
-      const inputMarca = (<HTMLInputElement>screen.getByLabelText('inputMarca')).value;
-      const inputCor = (<HTMLInputElement>screen.getByLabelText('inputCor')).value;
-      const inputAno = (<HTMLInputElement>screen.getByLabelText('inputAno')).value;
-      const inputPortas = (<HTMLInputElement>screen.getByLabelText('inputPortas')).value;
-      const inputCV = (<HTMLInputElement>screen.getByLabelText('inputCV')).value;
-      const inputCâmbio = (<HTMLInputElement>screen.getByLabelText('inputCâmbio')).value;
-      const inputAlarme = (<HTMLInputElement>screen.getByLabelText('inputAlarme')).value;
-      const inputTetoSolar = (<HTMLInputElement>screen.getByLabelText('inputTetoSolar')).value;
-      const inputComputadorDeBordo = (<HTMLInputElement>screen.getByLabelText('inputComputadorDeBordo')).value;
-      expect(inputName).toBe('Fusca')
-      expect(inputMarca).toBe('volks')
-      expect(inputCor).toBe('branco')
-      expect(inputAno).toBe('1999')
-      expect(inputPortas).toBe('2')
-      expect(inputCV).toBe('70')
-      expect(inputCâmbio).toBe('manual')
-      expect(inputAlarme).toBe('não tem')
-      expect(inputTetoSolar).toBe('não tem')
-      expect(inputComputadorDeBordo).toBe('não tem')
-    })
-  })
   it('Should render component ConfirmationModal', async () => {
     const { getByTestId } = renderListingOnCars()
 
-    await waitFor(() => {
+    await waitFor(async () => {
       const carsList = screen.getAllByRole('list', {
         name: 'cars-label'
       })
       const firstCarRow = within(carsList[0]).getAllByRole('listitem')
+      await fireEvent.click(within(firstCarRow[3]).getByText('Deletar carro'))
 
-      const deleteCar = within(firstCarRow[3]).getByText('Deletar carro')
-      fireEvent.click(deleteCar)
       expect(getByTestId('confirmation-modal')).toBeVisible()
     })
   })
-
-
 })
