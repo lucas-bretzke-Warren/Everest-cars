@@ -1,7 +1,6 @@
-import { render, fireEvent, screen, waitFor, within, getByText, getByTestId, } from '@testing-library/vue'
+import { render, fireEvent, screen, waitFor, within } from '@testing-library/vue'
 import '@testing-library/jest-dom'
 import ListingOnCars from '@/components/ListingOnCars.vue'
-import ModalForm from '@/components/ModalForm.vue'
 import { carArrayMock } from './ListingOnCarsMocks'
 import CarService from '@/services/carService'
 
