@@ -19,35 +19,35 @@
           </button>
         </li>
         <li>
-          <button
-            class="btn-delete"
-            @click="openModal(car.id)"
-          >
+          <button class="btn-delete" @click="openModal(car.id)">
             Deletar carro
           </button>
         </li>
       </ul>
-      <section v-show="showLoading" class="loading">
+      <div v-show="showLoading" class="loading">
         <h3>Loading . . .</h3>
-      </section>
+      </div>
+      <div v-show="msgRequiredError" class="loading">
+        <h3>Erro</h3>
+      </div>
     </section>
     <ModalForm
       data-testid="modal-form"
-      v-show="showModalForm"
       @close-modal="closeFormModal"
       @update-car="updateCar"
       @create-new-car="createNewCar"
       :isCreateProp="isCreate"
       :carIdProp="carId"
       :carProp="car"
+      :isOpen="showModalForm"
     />
     <ConfirmationModal
       data-testid="confirmation-modal"
-      v-show="checkAction"
       @close-modal="closeModal"
       @get-cars="getCars"
-      :id="carId"
       @on-change-loading="onChangeLoading"
+      :id="carId"
+      :isOpen="checkAction"
     />
   </div>
 </template>
@@ -67,10 +67,11 @@ import { ICar, IReturnUpdateCar } from "@/types";
 })
 export default class ListingOnCars extends Vue {
   public showModalForm = false;
-  private checkAction = false;
-  private showLoading = false;
+  public checkAction = false;
+  public showLoading = false;
+  public msgRequiredError = false;
   public dataCars: ICar[] = [];
-  private carId?: number = 0;
+  public carId?: number = 0;
   public car: ICar = {
     nome: "",
     marca: "",
@@ -84,7 +85,7 @@ export default class ListingOnCars extends Vue {
     computadorDeBordo: "",
     id: "",
   };
-  private isCreate = false;
+  public isCreate = false;
 
   private openFormModal() {
     this.showModalForm = true;
@@ -124,16 +125,23 @@ export default class ListingOnCars extends Vue {
     this.isCreate = true;
     this.openFormModal();
   }
+  private checkIfYouFellOnGet() {
+    if (this.dataCars.length == 0) {
+      this.msgRequiredError = true;
+    } else {
+      this.msgRequiredError = false;
+    }
+  }
 
   private async getCars() {
     try {
       this.onChangeLoading(true);
-
       const response = await carService.get();
       this.dataCars = response;
     } catch (erro) {
       console.log(erro);
     } finally {
+      this.checkIfYouFellOnGet();
       this.onChangeLoading(false);
     }
   }
