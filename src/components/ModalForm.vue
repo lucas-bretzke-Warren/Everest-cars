@@ -1,5 +1,5 @@
 <template>
-  <section class="modal">
+  <section class="modal" v-show="isOpen">
     <nav>
       <h4>{{ getModalTitle }}</h4>
       <button @click="closeModal">X</button>
@@ -7,7 +7,12 @@
     <form class="form_new_car">
       <div class="content">
         <label for="">Nome do carro</label>
-        <input aria-label="inputName" type="text" placeholder="nome?" v-model="car.nome"/>
+        <input
+          aria-label="inputName"
+          type="text"
+          placeholder="nome?"
+          v-model="car.nome"
+        />
       </div>
       <div class="content">
         <label for="">Marca</label>
@@ -92,7 +97,7 @@
       </div>
     </form>
     <footer>
-      <button @click="valifateForm">CONCLUIR</button>
+      <button @click="validateForm">CONCLUIR</button>
     </footer>
   </section>
 </template>
@@ -127,14 +132,17 @@ export default class Modalform extends Vue {
   })
   readonly isCreateProp!: boolean;
 
-  @Prop({ type: Number, required: false, default: 1 })
-  readonly carIdProp!: number;
+  @Prop({ type: String, required: false, default: null })
+  readonly carIdProp!: string;
 
   @Prop({
     type: Object,
     required: true,
   })
   readonly carProp!: ICar;
+
+  @Prop({ type: Boolean, required: true, default: false })
+  isOpen!: boolean;
 
   @Watch("carProp")
   onPropertyChanged() {
@@ -150,12 +158,13 @@ export default class Modalform extends Vue {
   private emitCreateNewCar(): ICar {
     return this.car;
   }
+
   @Emit("update-car")
   private emitUpdateCar(): IReturnUpdateCar {
     return { id: this.carIdProp, car: this.car };
   }
 
-  public valifateForm() {
+  public validateForm() {
     if (
       this.car.nome &&
       this.car.marca &&
