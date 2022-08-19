@@ -24,12 +24,8 @@
           </button>
         </li>
       </ul>
-      <div v-show="showLoading" class="loading">
-        <h3>Loading . . .</h3>
-      </div>
-      <div v-show="msgRequiredError" class="loading">
-        <h3>Erro</h3>
-      </div>
+      <h3 v-show="showLoading" class="loading">Loading . . .</h3>
+      <h3 v-show="msgRequiredError" class="loading">Erro</h3>
     </section>
     <ModalForm
       data-testid="modal-form"
@@ -71,7 +67,7 @@ export default class ListingOnCars extends Vue {
   public showLoading = false;
   public msgRequiredError = false;
   public dataCars: ICar[] = [];
-  public carId?: number = 0;
+  public carId?: string = "a-IfVws";
   public car: ICar = {
     nome: "",
     marca: "",
@@ -95,7 +91,7 @@ export default class ListingOnCars extends Vue {
     this.showModalForm = false;
   }
 
-  public openModal(id: number) {
+  public openModal(id: string) {
     this.checkAction = true;
     this.carId = id;
   }
@@ -140,6 +136,7 @@ export default class ListingOnCars extends Vue {
       this.dataCars = response;
     } catch (erro) {
       console.log(erro);
+      this.msgRequiredError = true;
     } finally {
       this.checkIfYouFellOnGet();
       this.onChangeLoading(false);
@@ -159,7 +156,7 @@ export default class ListingOnCars extends Vue {
     }
   }
 
-  public setCarToUpdate(id: number, car: ICar) {
+  public setCarToUpdate(id: string, car: ICar) {
     this.car = Object.assign({}, car);
     this.carId = id;
     this.isCreate = false;

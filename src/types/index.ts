@@ -5,23 +5,23 @@ export interface ICar {
     ano: number | null;
     portas: number | null;
     cv: number | null;
-    id: string
     cambio: string;
     alarme: string;
     tetoSolar: string
     computadorDeBordo: string;
+    id: string;
 }
 export interface IReturnUpdateCar {
-    id: number;
+    id: string;
     car: ICar;
 }
 
 export interface IPropsConfirmarionModal {
-    id: number,
+    id: string,
     loadingProp: boolean
 }
 export interface IPropsModalForm {
     isCreateProp: boolean,
-    carIdProp: number,
+    carIdProp: string,
     carProp: ICar,
 }

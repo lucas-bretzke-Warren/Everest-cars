@@ -1,5 +1,5 @@
  <template>
-  <section>
+  <section v-show="isOpen">
     <div class="content-title">
       <h4>Tem certeza</h4>
       <h4>que deseja deletar este item?</h4>
@@ -17,8 +17,11 @@ import carService from "@/services/carService";
 
 @Component
 export default class ConfirmationModal extends Vue {
-  @Prop({ type: Number, required: true })
-  readonly id!: number;
+  @Prop({ type: String, required: true, default: "a-IfVws" })
+  readonly id!: string;
+
+  @Prop({ type: Boolean, required: true, default: false })
+  isOpen!: boolean;
 
   @Emit("close-modal")
   public closeModal() {
@@ -30,20 +33,20 @@ export default class ConfirmationModal extends Vue {
     return;
   }
 
-  @Emit('on-change-loading')
+  @Emit("on-change-loading")
   private emitOnChangeLoading(value: boolean) {
-    return value
+    return value;
   }
 
   public async deleteCar() {
     try {
-      this.emitOnChangeLoading(true)
+      this.emitOnChangeLoading(true);
       await carService.delete(this.id);
     } catch (erro) {
       console.log(erro);
       alert("Não foi possível deletar este item");
     } finally {
-      this.emitOnChangeLoading(false)
+      this.emitOnChangeLoading(false);
       this.getCars();
       this.closeModal();
     }

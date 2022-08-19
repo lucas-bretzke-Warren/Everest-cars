@@ -6,7 +6,7 @@ export default {
         const response = await http.get<ICar[]>(`/cars`)
         return response?.data
     },
-    delete: async (id: number) => {
+    delete: async (id: string) => {
         return http.delete(`/cars/${id}`)
     },
     post: async (car: ICar) => {

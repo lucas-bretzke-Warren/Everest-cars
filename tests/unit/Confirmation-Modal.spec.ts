@@ -8,9 +8,8 @@ jest.mock('@/services/carService', () => ({
 }))
 
 interface Props {
-  id: number
+  id: string
 }
-
 const renderConfirmationModal = (props?: Props) =>
   render(ConfirmationModal, {
     props
@@ -38,12 +37,12 @@ describe('ConfirmationModal.vue', () => {
   })
 
   it("Should be able to method deleteCar event", async () => {
-    const { emitted } = renderConfirmationModal({ id: 1 })
+    const { emitted } = renderConfirmationModal({ id: "a-IfVws" })
 
     await fireEvent.click(screen.getByText('Sim'))
 
     expect(emitted()['on-change-loading'][0][0]).toBeTruthy()
-    expect(carService.delete).toBeCalledWith(1)
+    expect(carService.delete).toBeCalledWith("a-IfVws")
 
     await waitFor(() => {
       expect(emitted()['get-cars']).toBeTruthy()
