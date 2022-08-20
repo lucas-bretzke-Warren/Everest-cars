@@ -67,7 +67,7 @@ export default class ListingOnCars extends Vue {
   public showLoading = false;
   public msgRequiredError = false;
   public dataCars: ICar[] = [];
-  public carId?: string = "a-IfVws";
+  public carId?: string = "";
   public car: ICar = {
     nome: "",
     marca: "",
@@ -264,7 +264,7 @@ header {
         border: none;
         border-radius: 3px;
         cursor: pointer;
-        color: #f0edcc;
+        color: #0b0a02;
         background-color: transparent;
       }
       .btns:hover {
@@ -272,14 +272,14 @@ header {
       }
       .btn-put {
         .btns();
-        background-color: #f2aa4c;
+        background-color: #ebe4d9;
       }
       .btn-put:hover {
         transform: translateZ(10px) scale(1.1);
       }
       .btn-delete {
         .btns();
-        background-color: #a4193d;
+        background-color: #88e2f2;
       }
       .btn-delete:hover {
         transform: translateZ(10px) scale(1.1);
