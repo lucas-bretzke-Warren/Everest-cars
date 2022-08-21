@@ -1,4 +1,4 @@
-import { IReturnUpdateCar, ICar } from '@/types'
+import { ICar } from '@/types'
 import { http } from './config'
 
 export default {
@@ -12,7 +12,8 @@ export default {
     post: async (car: ICar) => {
         return http.post<ICar>("/cars/", car)
     },
-    put: async ({ id, car }: IReturnUpdateCar) => {
-        return http.put<ICar>(`/cars/${id}`, car)
+    put: async (request: ICar) => {
+        const response = await http.put<ICar>(`/cars/${request.id}`, request)
+        return response?.data
     }
 }

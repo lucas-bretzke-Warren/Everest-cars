@@ -14,7 +14,7 @@
         <li>{{ car.nome }}</li>
         <li>{{ car.ano }}</li>
         <li>
-          <button class="btn-put" @click="setCarToUpdate(car.id, car)">
+          <button class="btn-put" @click="setCarToUpdate(car)">
             Editar carro
           </button>
         </li>
@@ -33,7 +33,6 @@
       @update-car="updateCar"
       @create-new-car="createNewCar"
       :isCreateProp="isCreate"
-      :carIdProp="carId"
       :carProp="car"
       :isOpen="showModalForm"
     />
@@ -53,7 +52,7 @@ import { Component, Vue } from "vue-property-decorator";
 import carService from "@/services/carService";
 import ModalForm from "@/components/ModalForm.vue";
 import ConfirmationModal from "@/components/ConfirmationModal.vue";
-import { ICar, IReturnUpdateCar } from "@/types";
+import { ICar } from "@/types";
 
 @Component({
   components: {
@@ -156,20 +155,17 @@ export default class ListingOnCars extends Vue {
     }
   }
 
-  public setCarToUpdate(id: string, car: ICar) {
+  public setCarToUpdate(car: ICar) {
+    // this.car = { ...car };
     this.car = Object.assign({}, car);
-    this.carId = id;
     this.isCreate = false;
     this.openFormModal();
   }
 
-  private async updateCar({ id, car }: IReturnUpdateCar) {
+  private async updateCar(car: ICar) {
     try {
       this.onChangeLoading(true);
-      const carData: IReturnUpdateCar = {
-        id,
-        car,
-      };
+      const carData = car;
       await carService.put(carData);
     } catch (erro) {
       alert("Erro, tente novamente");

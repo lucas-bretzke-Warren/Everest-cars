@@ -104,7 +104,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Watch } from "vue-property-decorator";
-import { ICar, IReturnUpdateCar } from "@/types";
+import { ICar } from "@/types";
 
 @Component
 export default class Modalform extends Vue {
@@ -132,9 +132,6 @@ export default class Modalform extends Vue {
   })
   readonly isCreateProp!: boolean;
 
-  @Prop({ type: String, required: false, default: null })
-  readonly carIdProp!: string;
-
   @Prop({
     type: Object,
     required: true,
@@ -160,8 +157,8 @@ export default class Modalform extends Vue {
   }
 
   @Emit("update-car")
-  private emitUpdateCar(): IReturnUpdateCar {
-    return { id: this.carIdProp, car: this.car };
+  private emitUpdateCar() {
+    return this.car;
   }
 
   public validateForm() {
