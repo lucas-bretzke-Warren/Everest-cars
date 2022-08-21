@@ -11,10 +11,6 @@ export interface ICar {
     computadorDeBordo: string;
     id: string;
 }
-export interface IReturnUpdateCar {
-    id: string;
-    car: ICar;
-}
 
 export interface IPropsConfirmarionModal {
     id: string,
