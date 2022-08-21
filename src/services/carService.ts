@@ -9,8 +9,8 @@ export default {
     delete: async (id: string) => {
         return http.delete(`/cars/${id}`)
     },
-    post: async (car: ICar) => {
-        return http.post<ICar>("/cars/", car)
+    post: async (request: ICar) => {
+        return http.post<ICar>("/cars/", request)
     },
     put: async (request: ICar) => {
         const response = await http.put<ICar>(`/cars/${request.id}`, request)
