@@ -9,15 +9,8 @@ jest.mock('@/services/carService', () => ({
   put: jest.fn().mockResolvedValue({}),
 }))
 
-type Props = {
-  id: number
-}
-
-
-const renderListingOnCars = (props?: Props) =>
-  render(ListingOnCars, {
-    props,
-  })
+const renderListingOnCars = () =>
+  render(ListingOnCars)
 
 describe('ListingOnCars.vue', () => {
   beforeEach(() => {
