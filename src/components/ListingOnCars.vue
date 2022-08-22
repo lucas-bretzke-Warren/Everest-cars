@@ -66,7 +66,7 @@ export default class ListingOnCars extends Vue {
   public showLoading = false;
   public msgRequiredError = false;
   public dataCars: ICar[] = [];
-  public carId?: string = "";
+  public carId?: number = 0;
   public car: ICar = {
     nome: "",
     marca: "",
@@ -155,8 +155,7 @@ export default class ListingOnCars extends Vue {
     }
   }
 
-  public setCarToUpdate(car: ICar) {
-    // this.car = { ...car };
+  public setCarToUpdate(id: number, car: ICar) {
     this.car = Object.assign({}, car);
     this.isCreate = false;
     this.openFormModal();
