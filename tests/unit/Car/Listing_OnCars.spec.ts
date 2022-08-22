@@ -1,7 +1,7 @@
 import { render, fireEvent, screen, waitFor, within } from '@testing-library/vue'
 import '@testing-library/jest-dom'
 import ListingOnCars from '@/components/ListingOnCars.vue'
-import { carArrayMock, putCarMock } from './ListingOnCarsMocks'
+import { carArrayMock, carMock } from './ListingOnCarsMocks'
 import carService from '@/services/carService'
 
 jest.mock('@/services/carService', () => ({
@@ -85,7 +85,7 @@ describe('ListingOnCars.vue', () => {
   })
 
   it('Should render component ModalForm with empty filled out accordingly ', async () => {
-    jest.spyOn(carService, 'put').mockResolvedValueOnce(putCarMock)
+    jest.spyOn(carService, 'put').mockResolvedValueOnce(carMock)
     renderListingOnCars()
 
     await waitFor(async () => {
@@ -111,7 +111,7 @@ describe('ListingOnCars.vue', () => {
       await fireEvent.click(screen.getByText('CONCLUIR'))
 
       expect(screen.getByText('Loading . . .')).toBeVisible()
-      expect(carService.put).toBeCalledWith(putCarMock)
+      expect(carService.put).toBeCalledWith(carMock)
 
       await waitFor(() => {
         expect(screen.getByText('Loading . . .')).not.toBeVisible()

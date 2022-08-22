@@ -1,6 +1,21 @@
 import { ICar } from '@/types'
 
 
+export const postFakecar: ICar = {
+  nome: 'Tesla',
+  marca: 'Tesla',
+  cor: 'branco',
+  ano: 2023,
+  portas: 4,
+  cv: 200,
+  alarme: 'tem',
+  cambio: 'manual',
+  tetoSolar: 'tem',
+  computadorDeBordo: 'tem',
+  id: "W-test"
+}
+
+
 export const carMock: ICar = {
   nome: 'Fusca',
   marca: 'volks',
@@ -12,7 +27,7 @@ export const carMock: ICar = {
   cambio: 'manual',
   tetoSolar: 'não tem',
   computadorDeBordo: 'não tem',
-  id: 'ayTdGKx'
+  id: "ayTdGKx"
 }
 
 export const carArrayMock: ICar[] = [
