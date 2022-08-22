@@ -66,7 +66,7 @@ export default class ListingOnCars extends Vue {
   public showLoading = false;
   public msgRequiredError = false;
   public dataCars: ICar[] = [];
-  public carId?: number = 0;
+  public carId?: string = "";
   public car: ICar = {
     nome: "",
     marca: "",
