@@ -10,7 +10,8 @@ export default {
         return http.delete(`/cars/${id}`)
     },
     post: async (request: ICar) => {
-        return http.post<ICar>("/cars/", request)
+        const response = await http.post<ICar>("/cars/", request)
+        return response?.data
     },
     put: async (request: ICar) => {
         const response = await http.put<ICar>(`/cars/${request.id}`, request)
