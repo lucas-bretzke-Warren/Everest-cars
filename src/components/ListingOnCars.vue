@@ -155,8 +155,8 @@ export default class ListingOnCars extends Vue {
     }
   }
 
-  public setCarToUpdate(id: number, car: ICar) {
-    this.car = Object.assign({}, car);
+  public setCarToUpdate(car: ICar) {
+    this.car = { ...car };
     this.isCreate = false;
     this.openFormModal();
   }
