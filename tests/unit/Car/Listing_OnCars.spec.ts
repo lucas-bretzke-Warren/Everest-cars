@@ -1,12 +1,13 @@
 import { render, fireEvent, screen, waitFor, within } from '@testing-library/vue'
 import '@testing-library/jest-dom'
 import ListingOnCars from '@/components/ListingOnCars.vue'
-import { carArrayMock, carMock } from './ListingOnCarsMocks'
+import { carArrayMock, carMock, postFakecar } from './ListingOnCarsMocks'
 import carService from '@/services/carService'
 
 jest.mock('@/services/carService', () => ({
   get: jest.fn().mockResolvedValue(require('./ListingOnCarsMocks.ts').carArrayMock),
   put: jest.fn().mockResolvedValue({}),
+  post: jest.fn().mockResolvedValue({}),
 }))
 
 const renderListingOnCars = () =>
@@ -65,6 +66,7 @@ describe('ListingOnCars.vue', () => {
   })
 
   it('Must render Modalform component with empty inputs', async () => {
+    jest.spyOn(carService, 'post').mockResolvedValueOnce(postFakecar)
     const { getByTestId } = renderListingOnCars()
 
     await fireEvent.click(screen.getByText('Adicionar carro'))
@@ -82,6 +84,42 @@ describe('ListingOnCars.vue', () => {
     expect(screen.getByLabelText('inputTetoSolar')).toHaveValue("")
     expect(screen.getByLabelText('inputComputadorDeBordo')).toHaveValue("")
 
+    const setup = () => {
+      const inputName = (screen.getByLabelText('inputName'))
+      const inputMarca = (screen.getByLabelText('inputMarca'))
+      const inputCor = (screen.getByLabelText('inputCor'))
+      const inputAno = (screen.getByLabelText('inputAno'))
+      const inputPortas = (screen.getByLabelText('inputPortas'))
+      const inputCV = (screen.getByLabelText('inputCV'))
+      const inputCambio = (screen.getByLabelText('inputCâmbio'))
+      const inputAlarme = (screen.getByLabelText('inputAlarme'))
+      const inputTetoSolar = (screen.getByLabelText('inputTetoSolar'))
+      const inputComputadorDeBordo = (screen.getByLabelText('inputComputadorDeBordo'))
+      return {
+        inputName, inputMarca, inputCor, inputAno, inputPortas, inputCV,
+        inputCambio, inputAlarme, inputTetoSolar, inputComputadorDeBordo,
+      }
+    }
+
+    const {
+      inputName, inputMarca, inputCor, inputAno, inputPortas, inputCV,
+      inputCambio, inputAlarme, inputTetoSolar, inputComputadorDeBordo
+    } = setup()
+
+    await fireEvent.update(inputName, 'Tesla ');
+    await fireEvent.update(inputMarca, 'Tesla');
+    await fireEvent.update(inputCor, 'branco');
+    await fireEvent.update(inputAno, '2023');
+    await fireEvent.update(inputPortas, '4');
+    await fireEvent.update(inputCV, '200');
+    await fireEvent.update(inputAlarme, 'tem');
+    await fireEvent.update(inputCambio, 'manual');
+    await fireEvent.update(inputTetoSolar, 'tem');
+    await fireEvent.update(inputComputadorDeBordo, 'tem');
+
+    await fireEvent.click(screen.getByText('CONCLUIR'))
+
+    expect(carService.post).toBeCalled()
   })
 
   it('Should render component ModalForm with empty filled out accordingly ', async () => {
