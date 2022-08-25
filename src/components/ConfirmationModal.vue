@@ -1,56 +1,30 @@
  <template>
-  <section v-show="isOpen">
+  <section v-show="$store.state.checkAction">
     <div class="content-title">
       <h4>Tem certeza</h4>
       <h4>que deseja deletar este item?</h4>
     </div>
     <div class="content-btns">
       <button @click="closeModal">Cancelar</button
-      ><button @click="deleteCar(id)">Sim</button>
+      ><button @click="deleteCar()">Sim</button>
     </div>
   </section>
 </template>
  
  <script lang="ts">
-import { Vue, Component, Prop, Emit } from "vue-property-decorator";
-import carService from "@/services/carService";
+import { Vue, Component } from "vue-property-decorator";
 
 @Component
 export default class ConfirmationModal extends Vue {
-  @Prop({ type: String, required: true, default: "a-IfVws" })
-  readonly id!: string;
 
-  @Prop({ type: Boolean, required: true, default: false })
-  isOpen!: boolean;
-
-  @Emit("close-modal")
   public closeModal() {
-    return;
+    this.$store.commit("set_CheckAction_state");
   }
 
-  @Emit("get-cars")
-  private getCars() {
-    return;
+  public deleteCar() {
+    this.$store.dispatch("delete_Car", this.$store.state.carId);
   }
-
-  @Emit("on-change-loading")
-  private emitOnChangeLoading(value: boolean) {
-    return value;
-  }
-
-  public async deleteCar() {
-    try {
-      this.emitOnChangeLoading(true);
-      await carService.delete(this.id);
-    } catch (erro) {
-      console.log(erro);
-      alert("Não foi possível deletar este item");
-    } finally {
-      this.emitOnChangeLoading(false);
-      this.getCars();
-      this.closeModal();
-    }
-  }
+  
 }
 </script>
  
