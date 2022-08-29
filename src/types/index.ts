@@ -11,13 +11,16 @@ export interface ICar {
     computadorDeBordo: string;
     id: string;
 }
-
-export interface IPropsConfirmarionModal {
-    id: string,
-    loadingProp: boolean
-}
 export interface IPropsModalForm {
     isCreateProp: boolean,
-    carIdProp: string,
     carProp: ICar,
+}
+export interface IState {
+    dataCars: ICar[],
+    car: object,
+    checkAction: boolean,
+    isModalForm: boolean,
+    isLoading: boolean,
+    msgRequiredError: boolean,
+    carId: "",
 }
