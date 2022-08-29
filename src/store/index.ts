@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import carService from '@/services/carService'
-import { ICar } from '@/types/index'
+import { IState } from '@/types/index'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
+  state: <IState>{
     dataCars: [],
+    car: {},
     checkAction: false,
     isModalForm: false,
     isLoading: false,
