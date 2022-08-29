@@ -1,5 +1,5 @@
 <template>
-  <section class="modal" v-show="isOpen">
+  <section class="modal" v-show="$store.state.isModalForm">
     <nav>
       <h4>{{ getModalTitle }}</h4>
       <button @click="closeModal">X</button>
@@ -138,17 +138,12 @@ export default class Modalform extends Vue {
   })
   readonly carProp!: ICar;
 
-  @Prop({ type: Boolean, required: true, default: false })
-  isOpen!: boolean;
-
   @Watch("carProp")
   onPropertyChanged() {
     this.car = this.carProp;
   }
-
-  @Emit("close-modal")
   public closeModal() {
-    return;
+    this.$store.commit("set_ModalForm_state");
   }
 
   @Emit("create-new-car")
