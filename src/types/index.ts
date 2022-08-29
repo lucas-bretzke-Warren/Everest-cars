@@ -17,7 +17,7 @@ export interface IPropsModalForm {
 }
 export interface IState {
     dataCars: ICar[],
-    car: object,
+    car: ICar,
     checkAction: boolean,
     isModalForm: boolean,
     isLoading: boolean,
