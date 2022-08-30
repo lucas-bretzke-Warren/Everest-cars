@@ -103,34 +103,20 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Watch } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { ICar } from "@/types";
 
 @Component
 export default class Modalform extends Vue {
-  public car: ICar = {
-    nome: "",
-    marca: "",
-    cor: "",
-    ano: null,
-    portas: null,
-    cv: null,
-    alarme: "",
-    cambio: "",
-    tetoSolar: "",
-    computadorDeBordo: "",
-    id: "",
-  };
+  public car: ICar = this.$store.state.car;
 
-  get getModalTitle() {
-    return this.isCreateProp ? "Cadastrar novo carro" : "Atualizar carro";
+  get isCreateAction() {
+    return this.$store.state.isCreateAction;
   }
 
-  @Prop({
-    type: Boolean,
-    required: true,
-  })
-  readonly isCreateProp!: boolean;
+  get getModalTitle() {
+    return this.$store.getters.modal_form_title;
+  }
 
   @Prop({
     type: Object,
@@ -142,18 +128,17 @@ export default class Modalform extends Vue {
   onPropertyChanged() {
     this.car = this.carProp;
   }
+
+  private updateCar() {
+    this.$store.dispatch("update_car", this.car);
+  }
+
   public closeModal() {
-    this.$store.commit("set_ModalForm_state");
+    this.$store.commit("set_modalForm_state");
   }
 
-  @Emit("create-new-car")
-  private emitCreateNewCar(): ICar {
-    return this.car;
-  }
-
-  @Emit("update-car")
-  private emitUpdateCar() {
-    return this.car;
+  private createNewCar() {
+    this.$store.dispatch("create_new_car", this.car);
   }
 
   public validateForm() {
@@ -169,10 +154,10 @@ export default class Modalform extends Vue {
       this.car.tetoSolar &&
       this.car.computadorDeBordo
     ) {
-      if (this.isCreateProp == true) {
-        this.emitCreateNewCar();
+      if (this.isCreateAction == true) {
+        this.createNewCar();
       } else {
-        this.emitUpdateCar();
+        this.updateCar();
       }
     } else {
       alert("Algum campo não está preenchido");
