@@ -22,7 +22,7 @@ export default class ConfirmationModal extends Vue {
   }
 
   public deleteCar() {
-    this.$store.dispatch("delete_Car", this.$store.state.carId);
+    this.$store.dispatch("delete_car", this.$store.state.carId);
   }
   
 }
