@@ -10,7 +10,11 @@
         <li>Carro</li>
         <li>Ano</li>
       </ul>
-      <ul aria-label="cars-label" v-for="car in dataCars" :key="car.id">
+      <ul
+        aria-label="cars-label"
+        v-for="car in this.$store.state.dataCars"
+        :key="car.id"
+      >
         <li>{{ car.nome }}</li>
         <li>{{ car.ano }}</li>
         <li>
@@ -24,32 +28,23 @@
           </button>
         </li>
       </ul>
-      <h3 v-show="showLoading" class="loading">Loading . . .</h3>
-      <h3 v-show="msgRequiredError" class="loading">Erro</h3>
+      <h3 v-show="$store.state.isLoading" class="loading">Loading . . .</h3>
+      <h3 v-show="this.msgRequiredError" class="loading">Erro</h3>
     </section>
     <ModalForm
       data-testid="modal-form"
-      @close-modal="closeFormModal"
-      @update-car="updateCar"
-      @create-new-car="createNewCar"
-      :isCreateProp="isCreate"
+      v-show="$store.state.isModalForm"
       :carProp="car"
-      :isOpen="showModalForm"
     />
     <ConfirmationModal
       data-testid="confirmation-modal"
-      @close-modal="closeModal"
-      @get-cars="getCars"
-      @on-change-loading="onChangeLoading"
-      :id="carId"
-      :isOpen="checkAction"
+      v-show="$store.state.checkAction"
     />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import carService from "@/services/carService";
 import ModalForm from "@/components/ModalForm.vue";
 import ConfirmationModal from "@/components/ConfirmationModal.vue";
 import { ICar } from "@/types";
@@ -61,46 +56,16 @@ import { ICar } from "@/types";
   },
 })
 export default class ListingOnCars extends Vue {
-  public showModalForm = false;
-  public checkAction = false;
-  public showLoading = false;
-  public msgRequiredError = false;
-  public dataCars: ICar[] = [];
-  public carId?: string = "";
-  public car: ICar = {
-    nome: "",
-    marca: "",
-    cor: "",
-    ano: 0,
-    portas: 0,
-    cv: null,
-    alarme: "",
-    cambio: "",
-    tetoSolar: "",
-    computadorDeBordo: "",
-    id: "",
-  };
-  public isCreate = false;
+  public car = this.$store.state.car;
+  public msgRequiredError = this.$store.state.msgRequiredError;
 
-  private openFormModal() {
-    this.showModalForm = true;
-  }
-
-  private closeFormModal() {
-    this.showModalForm = false;
+  private modalForm() {
+    this.$store.commit("set_modalForm_state");
   }
 
   public openModal(id: string) {
-    this.checkAction = true;
-    this.carId = id;
-  }
-
-  private closeModal() {
-    this.checkAction = false;
-  }
-
-  public onChangeLoading(value: boolean) {
-    this.showLoading = value;
+    this.$store.commit("set_CheckAction_state");
+    this.$store.state.carId = id;
   }
 
   public setCreateNewCar() {
@@ -117,66 +82,22 @@ export default class ListingOnCars extends Vue {
       computadorDeBordo: "",
       id: "",
     };
-    this.isCreate = true;
-    this.openFormModal();
+    this.$store.state.isCreateAction = true;
+    this.modalForm();
   }
   private checkIfYouFellOnGet() {
-    if (this.dataCars.length == 0) {
-      this.msgRequiredError = true;
-    } else {
-      this.msgRequiredError = false;
-    }
-  }
-
-  private async getCars() {
-    try {
-      this.onChangeLoading(true);
-      const response = await carService.get();
-      this.dataCars = response;
-    } catch (erro) {
-      console.log(erro);
-      this.msgRequiredError = true;
-    } finally {
-      this.checkIfYouFellOnGet();
-      this.onChangeLoading(false);
-    }
-  }
-
-  private async createNewCar(car: ICar) {
-    try {
-      this.onChangeLoading(true);
-      await carService.post(car);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      this.closeFormModal();
-      this.getCars();
-      this.onChangeLoading(false);
-    }
+    this.msgRequiredError = this.$store.state.dataCars == 0 ? true : false;
   }
 
   public setCarToUpdate(car: ICar) {
     this.car = { ...car };
-    this.isCreate = false;
-    this.openFormModal();
-  }
-
-  private async updateCar(car: ICar) {
-    try {
-      this.onChangeLoading(true);
-      const carData = car;
-      await carService.put(carData);
-    } catch (erro) {
-      alert("Erro, tente novamente");
-    } finally {
-      this.closeFormModal();
-      this.getCars();
-      this.onChangeLoading(false);
-    }
+    this.$store.state.isCreateAction = false;
+    this.modalForm();
   }
 
   async mounted() {
-    await this.getCars();
+    await this.$store.dispatch("get_cars");
+    this.checkIfYouFellOnGet();
   }
 }
 </script>
