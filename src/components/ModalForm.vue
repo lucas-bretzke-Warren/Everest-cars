@@ -1,5 +1,5 @@
 <template>
-  <section class="modal" v-show="$store.state.isModalForm">
+  <section class="modal">
     <nav>
       <h4>{{ getModalTitle }}</h4>
       <button @click="closeModal">X</button>
@@ -105,14 +105,15 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { ICar } from "@/types";
+import { getModule } from "vuex-module-decorators";
+import { myMod } from "@/store";
 
 @Component
 export default class Modalform extends Vue {
-  public car: ICar = this.$store.state.car;
+  public myMod = getModule(myMod, this.$store);
+  
+  public car: ICar = this.$store.state.myMod.car;
 
-  get isCreateAction() {
-    return this.$store.state.isCreateAction;
-  }
 
   get getModalTitle() {
     return this.$store.getters.modal_form_title;
@@ -154,7 +155,7 @@ export default class Modalform extends Vue {
       this.car.tetoSolar &&
       this.car.computadorDeBordo
     ) {
-      if (this.isCreateAction == true) {
+      if (this.$store.state.myMod.isCreateAction == true) {
         this.createNewCar();
       } else {
         this.updateCar();
