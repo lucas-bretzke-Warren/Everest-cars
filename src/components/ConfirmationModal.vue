@@ -1,5 +1,5 @@
  <template>
-  <section v-show="$store.state.checkAction">
+  <section>
     <div class="content-title">
       <h4>Tem certeza</h4>
       <h4>que deseja deletar este item?</h4>
@@ -16,15 +16,14 @@ import { Vue, Component } from "vue-property-decorator";
 
 @Component
 export default class ConfirmationModal extends Vue {
-
-  public closeModal() {
+ 
+ public closeModal() {
     this.$store.commit("set_CheckAction_state");
   }
 
   public deleteCar() {
-    this.$store.dispatch("delete_car", this.$store.state.carId);
+    this.$store.dispatch("delete_car", this.$store.state.myMod.carId);
   }
-  
 }
 </script>
  
