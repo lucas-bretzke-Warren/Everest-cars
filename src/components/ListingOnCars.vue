@@ -12,7 +12,7 @@
       </ul>
       <ul
         aria-label="cars-label"
-        v-for="car in this.myMod.dataCars"
+        v-for="car in this.$store.state.myMod.dataCars"
         :key="car.id"
       >
         <li>{{ car.nome }}</li>
@@ -28,17 +28,19 @@
           </button>
         </li>
       </ul>
-      <h3 v-show="$store.state.isLoading" class="loading">Loading . . .</h3>
+      <h3 v-show="$store.state.myMod.isLoading" class="loading">
+        Loading . . .
+      </h3>
       <h3 v-show="this.msgRequiredError" class="loading">Erro</h3>
     </section>
     <ModalForm
       data-testid="modal-form"
-      v-show="this.$store.state.isModalForm"
+      v-show="this.$store.state.myMod.isModalForm"
       :carProp="car"
     />
     <ConfirmationModal
       data-testid="confirmation-modal"
-      v-show="this.myMod.checkAction"
+      v-show="this.$store.state.myMod.checkAction"
     />
   </div>
 </template>
@@ -48,8 +50,6 @@ import { Component, Vue } from "vue-property-decorator";
 import ModalForm from "@/components/ModalForm.vue";
 import ConfirmationModal from "@/components/ConfirmationModal.vue";
 import { ICar } from "@/types";
-import { getModule } from "vuex-module-decorators";
-import { MyModule } from "@/store";
 
 @Component({
   components: {
@@ -58,18 +58,17 @@ import { MyModule } from "@/store";
   },
 })
 export default class ListingOnCars extends Vue {
-  myMod = getModule(MyModule, this.$store);
 
-  public car = this.myMod.car;
-  public msgRequiredError = this.myMod.msgRequiredError;
+  public car = this.$store.state.myMod.car;
+  public msgRequiredError = this.$store.state.myMod.msgRequiredError;
 
   private modalForm() {
     this.$store.commit("set_modalForm_state");
   }
 
   public openModal(id: string) {
-    this.myMod.set_CheckAction_state;
-    this.myMod.carId = id;
+    this.$store.commit("set_CheckAction_state");
+    this.$store.state.myMod.carId = id;
   }
 
   public setCreateNewCar() {
@@ -86,21 +85,22 @@ export default class ListingOnCars extends Vue {
       computadorDeBordo: "",
       id: "",
     };
-    this.myMod.isCreateAction = true;
+    this.$store.state.myMod.isCreateAction = true;
     this.modalForm();
   }
   private checkIfYouFellOnGet() {
-    this.msgRequiredError = this.$store.state.dataCars == 0 ? true : false;
+    this.msgRequiredError =
+      this.$store.state.myMod.dataCars == 0 ? true : false;
   }
 
   public setCarToUpdate(car: ICar) {
     this.car = { ...car };
-    this.myMod.isCreateAction = false;
+    this.$store.state.myMod.isCreateAction = false;
     this.modalForm();
   }
 
   async mounted() {
-    this.myMod.get_cars();
+    this.$store.dispatch("get_cars");
     // this.checkIfYouFellOnGet();
   }
 }
