@@ -12,7 +12,7 @@
       </ul>
       <ul
         aria-label="cars-label"
-        v-for="car in this.$store.state.dataCars"
+        v-for="car in this.myMod.dataCars"
         :key="car.id"
       >
         <li>{{ car.nome }}</li>
@@ -33,12 +33,12 @@
     </section>
     <ModalForm
       data-testid="modal-form"
-      v-show="$store.state.isModalForm"
+      v-show="this.$store.state.isModalForm"
       :carProp="car"
     />
     <ConfirmationModal
       data-testid="confirmation-modal"
-      v-show="$store.state.checkAction"
+      v-show="this.myMod.checkAction"
     />
   </div>
 </template>
@@ -48,6 +48,8 @@ import { Component, Vue } from "vue-property-decorator";
 import ModalForm from "@/components/ModalForm.vue";
 import ConfirmationModal from "@/components/ConfirmationModal.vue";
 import { ICar } from "@/types";
+import { getModule } from "vuex-module-decorators";
+import { MyModule } from "@/store";
 
 @Component({
   components: {
@@ -56,16 +58,18 @@ import { ICar } from "@/types";
   },
 })
 export default class ListingOnCars extends Vue {
-  public car = this.$store.state.car;
-  public msgRequiredError = this.$store.state.msgRequiredError;
+  myMod = getModule(MyModule, this.$store);
+
+  public car = this.myMod.car;
+  public msgRequiredError = this.myMod.msgRequiredError;
 
   private modalForm() {
     this.$store.commit("set_modalForm_state");
   }
 
   public openModal(id: string) {
-    this.$store.commit("set_CheckAction_state");
-    this.$store.state.carId = id;
+    this.myMod.set_CheckAction_state;
+    this.myMod.carId = id;
   }
 
   public setCreateNewCar() {
@@ -82,7 +86,7 @@ export default class ListingOnCars extends Vue {
       computadorDeBordo: "",
       id: "",
     };
-    this.$store.state.isCreateAction = true;
+    this.myMod.isCreateAction = true;
     this.modalForm();
   }
   private checkIfYouFellOnGet() {
@@ -91,13 +95,13 @@ export default class ListingOnCars extends Vue {
 
   public setCarToUpdate(car: ICar) {
     this.car = { ...car };
-    this.$store.state.isCreateAction = false;
+    this.myMod.isCreateAction = false;
     this.modalForm();
   }
 
   async mounted() {
-    await this.$store.dispatch("get_cars");
-    this.checkIfYouFellOnGet();
+    this.myMod.get_cars();
+    // this.checkIfYouFellOnGet();
   }
 }
 </script>
