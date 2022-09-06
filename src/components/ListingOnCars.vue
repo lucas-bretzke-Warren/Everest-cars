@@ -42,6 +42,7 @@
       data-testid="confirmation-modal"
       v-show="this.$store.state.myMod.checkAction"
     />
+    <Cookie v-show="this.$store.state.myMod.isCookie" />
   </div>
 </template>
 
@@ -49,16 +50,17 @@
 import { Component, Vue } from "vue-property-decorator";
 import ModalForm from "@/components/ModalForm.vue";
 import ConfirmationModal from "@/components/ConfirmationModal.vue";
+import Cookie from "@/components/Cookies.vue";
 import { ICar } from "@/types";
 
 @Component({
   components: {
     ModalForm,
     ConfirmationModal,
+    Cookie,
   },
 })
 export default class ListingOnCars extends Vue {
-
   public car = this.$store.state.myMod.car;
   public msgRequiredError = this.$store.state.myMod.msgRequiredError;
 
@@ -97,6 +99,10 @@ export default class ListingOnCars extends Vue {
     this.car = { ...car };
     this.$store.state.myMod.isCreateAction = false;
     this.modalForm();
+  }
+
+  created() {
+    this.$store.state.myMod.isCookie = true;
   }
 
   async mounted() {
