@@ -20,12 +20,13 @@ export class myMod extends VuexModule {
     computadorDeBordo: "",
     id: "",
   };
+  carId = "";
   checkAction = false;
   isModalForm = false;
-  isCreateAction  = false;
+  isCreateAction = false;
   isLoading = false;
   msgRequiredError = false;
-  carId = "";
+  isCookie = false
 
 
   get modal_form_title() {
@@ -111,7 +112,7 @@ export class myMod extends VuexModule {
       this.context.commit('set_loading_state');
     }
   }
-  
+
   @Action
   async delete_car(payload: string) {
     try {
