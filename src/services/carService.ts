@@ -1,17 +1,20 @@
-import { IReturnUpdateCar, ICar } from '@/types'
+import { ICar } from '@/types'
 import { http } from './config'
 
 export default {
-    get: () => {
-        return http.get(`/cars`)
+    get: async () => {
+        const response = await http.get<ICar[]>(`/cars`)
+        return response?.data
     },
-    delete: (id: number) => {
+    delete: async (id: string) => {
         return http.delete(`/cars/${id}`)
     },
-    post: (car: ICar) => {
-        return http.post<ICar>("/cars/", car)
+    post: async (request: ICar) => {
+        const response = await http.post<ICar>("/cars/", request)
+        return response?.data
     },
-    put: ({ id, car }: IReturnUpdateCar) => {
-        return http.put<ICar>(`/cars/${id}`, car)
+    put: async (request: ICar) => {
+        const response = await http.put<ICar>(`/cars/${request.id}`, request)
+        return response?.data
     }
 }

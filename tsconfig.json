@@ -13,6 +13,7 @@
     "useDefineForClassFields": true,
     "sourceMap": true,
     "baseUrl": ".",
+    "importHelpers": true,//teste
     "types": [
       "webpack-env",
       "jest"
@@ -40,5 +41,6 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  
 }

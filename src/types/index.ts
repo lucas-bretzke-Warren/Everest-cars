@@ -9,18 +9,15 @@ export interface ICar {
     alarme: string;
     tetoSolar: string
     computadorDeBordo: string;
+    id: string;
 }
-export interface IReturnUpdateCar {
-    id: number;
-    car: ICar;
-}
-
-export interface IPropsConfirmarionModal {
-    id: number,
-    loadingProp: boolean
-}
-export interface IPropsModalForm {
-    isCreateProp: boolean,
-    carIdProp: number,
-    carProp: ICar,
+export interface IState {
+    dataCars: ICar[],
+    car: ICar,
+    checkAction: boolean,
+    isModalForm: boolean,
+    isCreateAction: boolean | null,
+    isLoading: boolean,
+    msgRequiredError: boolean,
+    carId: "",
 }

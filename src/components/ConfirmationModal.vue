@@ -6,47 +6,23 @@
     </div>
     <div class="content-btns">
       <button @click="closeModal">Cancelar</button
-      ><button @click="deleteCar(id)">Sim</button>
+      ><button @click="deleteCar()">Sim</button>
     </div>
   </section>
 </template>
  
  <script lang="ts">
-import { Vue, Component, Prop, Emit } from "vue-property-decorator";
-import carService from "@/services/carService";
+import { Vue, Component } from "vue-property-decorator";
 
 @Component
 export default class ConfirmationModal extends Vue {
-  @Prop({ type: Number, required: true })
-  readonly id?: number;
-
-  @Prop({
-    type: Boolean,
-    required: true,
-  })
-  private loadingProp!: boolean;
-
-  @Emit("close-modal")
-  public closeModal() {
-    return;
-  }
-  @Emit("get-cars")
-  private getCars() {
-    return;
+ 
+ public closeModal() {
+    this.$store.commit("set_CheckAction_state");
   }
 
-  public async deleteCar(id: number) {
-    try {
-      await carService.delete(id);
-      this.loadingProp = true;
-    } catch (erro) {
-      console.log(erro);
-      alert("Não foi pissível deletar este item");
-    } finally {
-      this.loadingProp = false;
-      this.getCars();
-      this.closeModal();
-    }
+  public deleteCar() {
+    this.$store.dispatch("delete_car", this.$store.state.myMod.carId);
   }
 }
 </script>

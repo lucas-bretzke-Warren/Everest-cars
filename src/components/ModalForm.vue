@@ -7,11 +7,17 @@
     <form class="form_new_car">
       <div class="content">
         <label for="">Nome do carro</label>
-        <input type="text" placeholder="nome?" v-model="car.nome" />
+        <input
+          aria-label="inputName"
+          type="text"
+          placeholder="nome?"
+          v-model="car.nome"
+        />
       </div>
       <div class="content">
         <label for="">Marca</label>
         <input
+          aria-label="inputMarca"
           type="text"
           v-model="car.marca"
           placeholder="Reno,Fiat,Volvo..."
@@ -20,18 +26,25 @@
       <div class="content">
         <label for="">Cor</label>
         <input
+          aria-label="inputCor"
           type="text"
           v-model="car.cor"
           placeholder="branco,cinza,rosa..."
         />
       </div>
       <div class="content">
-        <label for="">Ano</label>
-        <input type="text" v-model="car.ano" placeholder="##/##/####" />
+        <label for="">Ano de fabricação</label>
+        <input
+          aria-label="inputAno"
+          type="text"
+          v-model="car.ano"
+          placeholder="##/##/####"
+        />
       </div>
       <div class="content">
         <label for=""> Quantidade de portas</label>
         <input
+          aria-label="inputPortas"
           type="text"
           v-model="car.portas"
           placeholder="digite um numero"
@@ -39,11 +52,17 @@
       </div>
       <div class="content">
         <label for="">CV</label>
-        <input type="text" v-model="car.cv" placeholder="quantos CV ?" />
+        <input
+          aria-label="inputCV"
+          type="text"
+          v-model="car.cv"
+          placeholder="quantos CV ?"
+        />
       </div>
       <div class="content">
         <label for="">Câmbio</label>
         <input
+          aria-label="inputCâmbio"
           type="text"
           v-model="car.cambio"
           placeholder="automático / manual"
@@ -51,11 +70,17 @@
       </div>
       <div class="content">
         <label for="">Alarme</label>
-        <input type="text" v-model="car.alarme" placeholder="tem / não tem ?" />
+        <input
+          aria-label="inputAlarme"
+          type="text"
+          v-model="car.alarme"
+          placeholder="tem / não tem ?"
+        />
       </div>
       <div class="content">
         <label for="">Teto solar</label>
         <input
+          aria-label="inputTetoSolar"
           type="text"
           v-model="car.tetoSolar"
           placeholder="tem / não tem ?"
@@ -64,6 +89,7 @@
       <div class="content">
         <label for="">Computador de bordo</label>
         <input
+          aria-label="inputComputadorDeBordo"
           type="text"
           v-model="car.computadorDeBordo"
           placeholder="tem / não tem ?"
@@ -71,42 +97,27 @@
       </div>
     </form>
     <footer>
-      <button @click="valifateForm">CONCLUIR</button>
+      <button @click="validateForm">CONCLUIR</button>
     </footer>
   </section>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Watch } from "vue-property-decorator";
-import { ICar, IReturnUpdateCar } from "@/types";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
+import { ICar } from "@/types";
+import { getModule } from "vuex-module-decorators";
+import { myMod } from "@/store";
 
 @Component
 export default class Modalform extends Vue {
-  public car: ICar = {
-    nome: "",
-    marca: "",
-    cor: "",
-    ano: null,
-    portas: null,
-    cv: null,
-    alarme: "",
-    cambio: "",
-    tetoSolar: "",
-    computadorDeBordo: "",
-  };
+  public myMod = getModule(myMod, this.$store);
+  
+  public car: ICar = this.$store.state.myMod.car;
+
 
   get getModalTitle() {
-    return this.isCreateProp ? "Cadastrar novo carro" : "Atualizar carro";
+    return this.$store.getters.modal_form_title;
   }
-
-  @Prop({
-    type: Boolean,
-    required: true,
-  })
-  readonly isCreateProp!: boolean;
-
-  @Prop({ type: Number, required: false, default: 1 })
-  readonly carIdProp!: number;
 
   @Prop({
     type: Object,
@@ -119,21 +130,19 @@ export default class Modalform extends Vue {
     this.car = this.carProp;
   }
 
-  @Emit("close-modal")
+  private updateCar() {
+    this.$store.dispatch("update_car", this.car);
+  }
+
   public closeModal() {
-    return;
+    this.$store.commit("set_modalForm_state");
   }
 
-  @Emit("create-new-car")
-  private emitCreateNewCar(): ICar {
-    return this.car;
-  }
-  @Emit("update-car")
-  private emitUpdateCar(): IReturnUpdateCar {
-    return { id: this.carIdProp, car: this.car };
+  private createNewCar() {
+    this.$store.dispatch("create_new_car", this.car);
   }
 
-  public valifateForm() {
+  public validateForm() {
     if (
       this.car.nome &&
       this.car.marca &&
@@ -146,10 +155,10 @@ export default class Modalform extends Vue {
       this.car.tetoSolar &&
       this.car.computadorDeBordo
     ) {
-      if (this.isCreateProp == true) {
-        this.emitCreateNewCar();
+      if (this.$store.state.myMod.isCreateAction == true) {
+        this.createNewCar();
       } else {
-        this.emitUpdateCar();
+        this.updateCar();
       }
     } else {
       alert("Algum campo não está preenchido");

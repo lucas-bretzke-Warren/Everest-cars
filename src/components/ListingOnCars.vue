@@ -1,18 +1,24 @@
 <template>
   <div>
     <nav>Lista de carros</nav>
-    <header><button @click="setCreateNewCar">Adicionar carro</button></header>
+    <header>
+      <button @click="setCreateNewCar">Adicionar carro</button>
+    </header>
 
     <section class="container-list">
       <ul class="titles">
         <li>Carro</li>
         <li>Ano</li>
       </ul>
-      <ul v-for="car in dataCars" :key="car.id">
+      <ul
+        aria-label="cars-label"
+        v-for="car in this.$store.state.myMod.dataCars"
+        :key="car.id"
+      >
         <li>{{ car.nome }}</li>
         <li>{{ car.ano }}</li>
         <li>
-          <button class="btn-put" @click="setCarToUpdate(car.id, car)">
+          <button class="btn-put" @click="setCarToUpdate(car)">
             Editar carro
           </button>
         </li>
@@ -22,74 +28,49 @@
           </button>
         </li>
       </ul>
-      <section v-show="showLoading" class="loading">
-        <h3>Loading . . .</h3>
-      </section>
+      <h3 v-show="$store.state.myMod.isLoading" class="loading">
+        Loading . . .
+      </h3>
+      <h3 v-show="this.msgRequiredError" class="loading">Erro</h3>
     </section>
     <ModalForm
-      v-show="formNewCar"
-      @close-modal="closeFormModal"
-      @update-car="updateCar"
-      @create-new-car="createNewCar"
-      :isCreateProp="isCreate"
-      :carIdProp="carId"
+      data-testid="modal-form"
+      v-show="this.$store.state.myMod.isModalForm"
       :carProp="car"
     />
     <ConfirmationModal
-      v-show="checkAction"
-      @close-modal="closeModal"
-      @get-cars="getCars"
-      :id="carId"
-      :loadingProp="showLoading"
+      data-testid="confirmation-modal"
+      v-show="this.$store.state.myMod.checkAction"
     />
+    <Cookie v-show="this.$store.state.myMod.isCookie" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import carService from "../services/carService";
 import ModalForm from "@/components/ModalForm.vue";
-import ConfirmationModal from "@/components/ConfirmarionModal.vue";
-import { ICar, IReturnUpdateCar } from "@/types";
+import ConfirmationModal from "@/components/ConfirmationModal.vue";
+import Cookie from "@/components/Cookies.vue";
+import { ICar } from "@/types";
 
 @Component({
   components: {
     ModalForm,
     ConfirmationModal,
+    Cookie,
   },
 })
 export default class ListingOnCars extends Vue {
-  private formNewCar = false;
-  private checkAction = false;
-  private showLoading = false;
-  public dataCars = [];
-  private carId?: number = 0;
-  public car: ICar = {
-    nome: "",
-    marca: "",
-    cor: "",
-    ano: 0,
-    portas: 0,
-    cv: null,
-    alarme: "",
-    cambio: "",
-    tetoSolar: "",
-    computadorDeBordo: "",
-  };
-  private isCreate = false ;
+  public car = this.$store.state.myMod.car;
+  public msgRequiredError = this.$store.state.myMod.msgRequiredError;
 
-  private openFormModal() {
-    this.formNewCar = true;
+  private modalForm() {
+    this.$store.commit("set_modalForm_state");
   }
-  private closeFormModal() {
-    this.formNewCar = false;
-  }
-  public openModal(id: number) {
-    this.checkAction = true;
-    this.carId = id;
-  }
-  private closeModal() {
-    this.checkAction = false;
+
+  public openModal(id: string) {
+    this.$store.commit("set_CheckAction_state");
+    this.$store.state.myMod.carId = id;
   }
 
   public setCreateNewCar() {
@@ -104,59 +85,29 @@ export default class ListingOnCars extends Vue {
       cambio: "",
       tetoSolar: "",
       computadorDeBordo: "",
+      id: "",
     };
-    this.isCreate = true;
-    this.openFormModal();
+    this.$store.state.myMod.isCreateAction = true;
+    this.modalForm();
+  }
+  private checkIfYouFellOnGet() {
+    this.msgRequiredError =
+      this.$store.state.myMod.dataCars == 0 ? true : false;
   }
 
-  private async getCars() {
-    try {
-      this.showLoading = true;
-      const response = await carService.get();
-      this.dataCars = response.data;
-    } catch (erro) {
-      console.log(erro);
-    } finally {
-      this.showLoading = false;
-    }
-  }
-  private async createNewCar(car: ICar) {
-    try {
-      this.showLoading = true;
-      await carService.post(car);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      this.closeFormModal();
-      this.getCars();
-      this.showLoading = false;
-    }
-  }
-  public setCarToUpdate(id: number, car: ICar) {
-    this.car = Object.assign({}, car);
-    this.carId = id;
-    this.isCreate = false;
-    this.openFormModal();
-  }
-  private async updateCar({ id, car }: IReturnUpdateCar) {
-    try {
-      this.showLoading = true;
-      const carData: IReturnUpdateCar = {
-        id,
-        car,
-      };
-      await carService.put(carData);
-    } catch (erro) {
-      alert("Erro, tente novamente");
-    } finally {
-      this.closeFormModal();
-      this.getCars();
-      this.showLoading = false;
-    }
+  public setCarToUpdate(car: ICar) {
+    this.car = { ...car };
+    this.$store.state.myMod.isCreateAction = false;
+    this.modalForm();
   }
 
-  private mounted() {
-    this.getCars();
+  created() {
+    this.$store.state.myMod.isCookie = true;
+  }
+
+  async mounted() {
+    this.$store.dispatch("get_cars");
+    // this.checkIfYouFellOnGet();
   }
 }
 </script>
@@ -239,7 +190,7 @@ header {
         border: none;
         border-radius: 3px;
         cursor: pointer;
-        color: #f0edcc;
+        color: #0b0a02;
         background-color: transparent;
       }
       .btns:hover {
@@ -247,14 +198,14 @@ header {
       }
       .btn-put {
         .btns();
-        background-color: #f2aa4c;
+        background-color: #ebe4d9;
       }
       .btn-put:hover {
         transform: translateZ(10px) scale(1.1);
       }
       .btn-delete {
         .btns();
-        background-color: #a4193d;
+        background-color: #88e2f2;
       }
       .btn-delete:hover {
         transform: translateZ(10px) scale(1.1);
