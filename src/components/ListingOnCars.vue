@@ -3,6 +3,7 @@
     <nav>Lista de carros</nav>
     <header>
       <button @click="setCreateNewCar">Adicionar carro</button>
+      <input v-model="search" placeholder="Pesquisar" class="search-tab" />
     </header>
 
     <section class="container-list">
@@ -10,11 +11,7 @@
         <li>Carro</li>
         <li>Ano</li>
       </ul>
-      <ul
-        aria-label="cars-label"
-        v-for="car in this.$store.state.myMod.dataCars"
-        :key="car.id"
-      >
+      <ul aria-label="cars-label" v-for="car in filterProjects" :key="car.id">
         <li>{{ car.nome }}</li>
         <li>{{ car.ano }}</li>
         <li>
@@ -63,6 +60,14 @@ import { ICar } from "@/types";
 export default class ListingOnCars extends Vue {
   public car = this.$store.state.myMod.car;
   public msgRequiredError = this.$store.state.myMod.msgRequiredError;
+  public search = "";
+
+  get filterProjects() {
+    if (this.search === "") return this.$store.state.myMod.dataCars;
+    return this.$store.state.myMod.dataCars.filter((item) => {
+      return item.nome.toUpperCase().includes(this.search.toUpperCase());
+    });
+  }
 
   private modalForm() {
     this.$store.commit("set_modalForm_state");
@@ -130,12 +135,13 @@ nav {
   font-size: 15px;
 }
 header {
-  width: 100%;
+  width: 750px;
   height: 110px;
+  margin: 0px auto;
 
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
+  justify-content: space-between;
 
   button {
     padding: 7px 36px;
@@ -149,6 +155,14 @@ header {
   button:hover {
     transition: 0.3s;
     transform: translateZ(10px) scale(1.1);
+  }
+
+  .search-tab {
+    width: 300px;
+    padding: 5px;
+
+    outline: none;
+    border-radius: 2px;
   }
 }
 
